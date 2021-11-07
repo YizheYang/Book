@@ -7,4 +7,4 @@ package com.github.book
  * version 1.0
  * update none
  **/
-data class SeatBean(var building: String, var floor: String, var area: String, var isBook: Boolean)
+data class SeatBean(var building: String, var floor: String, var area: String, var no: Int, var isBook: Boolean)

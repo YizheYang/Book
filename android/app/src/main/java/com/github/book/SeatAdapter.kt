@@ -31,7 +31,7 @@ class SeatAdapter(private val list: MutableList<SeatBean>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: SeatViewHolder, position: Int) {
-        holder.no.text = position.toString()
+        holder.no.text = list[position].no.toString()
         if (list[position].isBook) {
             holder.itemView.setBackgroundColor(Color.argb(127, 199, 84, 80))
             holder.itemView.isEnabled = false

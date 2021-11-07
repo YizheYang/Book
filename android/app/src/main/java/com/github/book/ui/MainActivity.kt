@@ -11,6 +11,7 @@ import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.SeatAdapter
 import com.github.book.base.BaseActivity
+import com.github.book.widget.ComboBox
 
 class MainActivity : BaseActivity() {
 
@@ -27,6 +28,9 @@ class MainActivity : BaseActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SeatAdapter
     private lateinit var username: String
+    private lateinit var cb_building: ComboBox
+    private lateinit var cb_floor: ComboBox
+    private lateinit var cb_area: ComboBox
 
     override fun getLayoutId() = R.layout.activity_main
 
@@ -38,11 +42,26 @@ class MainActivity : BaseActivity() {
         adapter = SeatAdapter(viewModel.getSeatListLD().value!!)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
+        cb_building = findViewById(R.id.cb_building)
+        cb_floor = findViewById(R.id.cb_floor)
+        cb_area = findViewById(R.id.cb_area)
     }
 
     override fun onStart() {
         super.onStart()
         username = intent.getStringExtra("username").toString()
+        cb_building.apply {
+            viewModel.getSeatListLD().value?.map { it.building }?.let { setList(it) }
+            setDescription("楼")
+        }
+        cb_building.apply {
+            viewModel.getSeatListLD().value?.map { it.floor }?.let { setList(it) }
+            setDescription("层")
+        }
+        cb_building.apply {
+            viewModel.getSeatListLD().value?.map { it.area }?.let { setList(it) }
+            setDescription("区")
+        }
         setListener()
         setObserver()
     }

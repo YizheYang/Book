@@ -13,11 +13,19 @@ import androidx.lifecycle.ViewModel
 class MainVM : ViewModel() {
     private val seatListLD = MutableLiveData<MutableList<SeatBean>>()
 
+    init {
+        loadData()
+    }
+
     fun getSeatListLD(): MutableLiveData<MutableList<SeatBean>> {
         return seatListLD
     }
 
     fun setSeatList(list: MutableList<SeatBean>) {
         seatListLD.value = list
+    }
+
+    private fun loadData() {
+        setSeatList(mutableListOf())
     }
 }
