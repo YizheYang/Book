@@ -19,12 +19,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.github.book.widget.ComboBox
-            android:id="@+id/cb_building"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <com.github.book.widget.ComboBox
             android:id="@+id/cb_floor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

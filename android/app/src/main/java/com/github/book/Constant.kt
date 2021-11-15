@@ -8,4 +8,5 @@ package com.github.book
  * update none
  **/
 object Constant {
+    // ip = 47.106.89.121
 }

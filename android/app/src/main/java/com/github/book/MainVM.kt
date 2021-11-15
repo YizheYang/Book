@@ -2,6 +2,8 @@ package com.github.book
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.book.entity.SeatBean
+import org.jetbrains.annotations.TestOnly
 
 /**
  * description none
@@ -12,6 +14,9 @@ import androidx.lifecycle.ViewModel
  **/
 class MainVM : ViewModel() {
     private val seatListLD = MutableLiveData<MutableList<SeatBean>>()
+
+    var tempFloor = MutableLiveData<String>()
+    var tempArea = MutableLiveData<String>()
 
     init {
         loadData()
@@ -25,7 +30,15 @@ class MainVM : ViewModel() {
         seatListLD.value = list
     }
 
+    @TestOnly
     private fun loadData() {
-        setSeatList(mutableListOf())
+        val list = mutableListOf(
+            SeatBean("1", "a", 1, true),
+            SeatBean("1", "a", 2, false),
+            SeatBean("1", "a", 3, false),
+            SeatBean("1", "b", 1, false),
+            SeatBean("2", "b", 4, false)
+        )
+        setSeatList(list)
     }
 }

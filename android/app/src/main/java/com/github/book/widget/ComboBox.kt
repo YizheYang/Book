@@ -26,7 +26,7 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
     private var ib_more: ImageButton
     private var tv_description: TextView
 
-    private var listPopupWindow: ListPopupWindow?
+    private var listPopupWindow: ListPopupWindow? = null
     private var list = listOf<String>()
     private var myClick: OnMyClick? = null
 
@@ -35,12 +35,19 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
         tv_item = findViewById(R.id.tv_comboBox_item)
         ib_more = findViewById(R.id.ib_comboBox)
         tv_description = findViewById(R.id.tv_comboBox_description)
-        listPopupWindow = ListPopupWindow(context)
         setListener()
     }
 
-    fun setList(list: List<String>) {
-        this.list = list
+    fun setList(list: List<String>?) {
+        list?.let {
+            this.list = it
+        }
+    }
+
+    fun setItem(string: String?) {
+        string?.let {
+            tv_item.text = it
+        }
     }
 
     fun setDescription(description: String) {
@@ -50,6 +57,7 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
     private fun setListener() {
         ib_more.setOnClickListener {
             if (listPopupWindow == null) {
+                listPopupWindow = ListPopupWindow(context)
                 show()
             } else {
                 close()
@@ -68,8 +76,10 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
         listPopupWindow?.setAdapter(adapter)
         listPopupWindow?.anchorView = tv_item
         listPopupWindow?.setOnItemClickListener { parent, view, position, id ->
-            myClick?.onClick(parent, view, position, id)
+            myClick?.onClick(parent, view, position, id, list)
+            close()
         }
+        listPopupWindow?.show()
     }
 
     private fun close() {
@@ -89,7 +99,7 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
     }
 
     interface OnMyClick {
-        fun onClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long)
+        fun onClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long, list: List<String>)
     }
 
     fun setMyClick(myClick: OnMyClick) {

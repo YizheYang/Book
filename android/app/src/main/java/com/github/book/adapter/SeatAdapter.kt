@@ -1,4 +1,4 @@
-package com.github.book
+package com.github.book.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.github.book.R
+import com.github.book.entity.SeatBean
 
 /**
  * description none
@@ -14,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
  * version 1.0
  * update none
  **/
-class SeatAdapter(private val list: MutableList<SeatBean>) : RecyclerView.Adapter<SeatAdapter.SeatViewHolder>() {
+class SeatAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapter<SeatAdapter.SeatViewHolder>() {
     private var mOnChildrenClickListener: OnChildrenClickListener? = null
 
     inner class SeatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -33,7 +35,7 @@ class SeatAdapter(private val list: MutableList<SeatBean>) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: SeatViewHolder, position: Int) {
         holder.no.text = list[position].no.toString()
         if (list[position].isBook) {
-            holder.itemView.setBackgroundColor(Color.argb(127, 199, 84, 80))
+            holder.no.setBackgroundColor(Color.argb(127, 199, 84, 80))
             holder.itemView.isEnabled = false
         }
     }
@@ -46,5 +48,9 @@ class SeatAdapter(private val list: MutableList<SeatBean>) : RecyclerView.Adapte
 
     fun setOnChildrenClickListener(onChildrenClickListener: OnChildrenClickListener) {
         mOnChildrenClickListener = onChildrenClickListener
+    }
+
+    fun setList(list: MutableList<SeatBean>) {
+        this.list = list
     }
 }

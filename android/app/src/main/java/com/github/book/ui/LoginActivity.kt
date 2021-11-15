@@ -42,6 +42,7 @@ class LoginActivity : BaseActivity() {
             val result = request(username, password)
             if (result) {
                 MainActivity.startActivity(this, username)
+                finish()
             } else {
                 Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
             }
