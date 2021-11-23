@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getAccount,account);
         queryWrapper.eq(User::getPassword,password);
-        queryWrapper.select(User::getAccount,User::getName,User::getTimeId);
+        queryWrapper.select(User::getId,User::getAccount,User::getName,User::getTimeId);
         queryWrapper.last("limit 1");
         return userMapper.selectOne(queryWrapper);
     }
