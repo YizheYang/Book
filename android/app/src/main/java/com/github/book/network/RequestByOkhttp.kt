@@ -14,12 +14,23 @@ class RequestByOkhttp {
 
     fun post(ip: String, json: String, callback: Callback) {
         thread {
+            val client = OkHttpClient()
             val requestBody = RequestBody.create(MediaType.get("application/json;charset=utf-8"), json)
             val request = Request.Builder()
                 .url(ip)
                 .post(requestBody)
                 .build()
+            client.newCall(request).enqueue(callback)
+            client.newCall(request).execute()
+        }
+    }
+
+    fun get(ip: String, callback: Callback) {
+        thread {
             val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(ip)
+                .build()
             client.newCall(request).enqueue(callback)
             client.newCall(request).execute()
         }

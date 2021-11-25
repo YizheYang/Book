@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.book.R
 import com.github.book.entity.SeatBean
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * description none
@@ -34,9 +36,13 @@ class SeatAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: SeatViewHolder, position: Int) {
         holder.no.text = list[position].no.toString()
-        if (list[position].isBook) {
-            holder.no.setBackgroundColor(Color.argb(127, 199, 84, 80))
-            holder.itemView.isEnabled = false
+        val date = SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()
+        for (d in list[position].statusList) {
+            if (date in d.sDate..d.dDate) {
+                holder.no.setBackgroundColor(Color.argb(127, 199, 84, 80))
+                holder.itemView.isEnabled = false
+                return
+            }
         }
     }
 

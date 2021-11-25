@@ -7,4 +7,4 @@ package com.github.book.entity
  * version 1.0
  * update none
  **/
-data class MyResponse(val success: String, val code: String, val msg: String, val data: MyResponseData)
+data class LoginRequest(val account: String, val password: String)

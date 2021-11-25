@@ -51,28 +51,16 @@ class MainActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         username = intent.getStringExtra("username").toString()
-        cb_floor.apply {
-            viewModel.getSeatListLD().value
-                ?.map { it.floor }// 取floor值组成新list
-                ?.toSortedSet()?.toList()// 去重
-                ?.let {
-                    setList(it)
-                    setItem(it[0])
-                    viewModel.tempFloor.value = it[0]
+        viewModel.setOnRequest(object : MainVM.OnRequest {
+            override fun onFinish() {
+                if (viewModel.getSeatListLD().value?.size != 0) {
+                    runOnUiThread {
+                        initCBFloor()
+                        initCBArea()
+                    }
                 }
-            setDescription("层")
-        }
-        cb_area.apply {
-            viewModel.getSeatListLD().value
-                ?.map { it.area }// 取area值组成新list
-                ?.toSortedSet()?.toList()// 去重
-                ?.let {
-                    setList(it)
-                    setItem(it[0])
-                    viewModel.tempArea.value = it[0]
-                }
-            setDescription("区")
-        }
+            }
+        })
         setListener()
         setObserver()
     }
@@ -97,13 +85,13 @@ class MainActivity : BaseActivity() {
                         setItem(s)
                         cb_area.apply {
                             viewModel.getSeatListLD().value
-                                ?.filter { it.floor == s }
+                                ?.filter { it.floor.toString() == s }
                                 ?.map { it.area }// 取area值组成新list
                                 ?.toSortedSet()?.toList()// 去重
-                                ?.let {
-                                    setList(it)
-                                    setItem(it[0])
-                                    viewModel.tempArea.value = it[0]
+                                ?.let { it ->
+                                    setList(it.map { it.toString() })
+                                    setItem(it[0].toString())
+                                    viewModel.tempArea.value = it[0].toString()
                                 }
                         }
                         viewModel.tempFloor.value = s
@@ -146,10 +134,38 @@ class MainActivity : BaseActivity() {
 
     private fun refreshList() {
         viewModel.getSeatListLD().value
-            ?.filter { it.floor == viewModel.tempFloor.value && it.area == viewModel.tempArea.value }
+            ?.filter { it.floor.toString() == viewModel.tempFloor.value && it.area.toString() == viewModel.tempArea.value }
             ?.let {
                 adapter.setList(it as MutableList<SeatBean>)
             }
         adapter.notifyDataSetChanged()
+    }
+
+    private fun initCBFloor() {
+        cb_floor.apply {
+            viewModel.getSeatListLD().value
+                ?.map { it.floor }// 取floor值组成新list
+                ?.toSortedSet()?.toList()// 去重
+                ?.let { it ->
+                    setList(it.map { it.toString() })
+                    setItem(it[0].toString())
+                    viewModel.tempFloor.value = it[0].toString()
+                }
+            setDescription("层")
+        }
+    }
+
+    private fun initCBArea() {
+        cb_area.apply {
+            viewModel.getSeatListLD().value
+                ?.map { it.area }// 取area值组成新list
+                ?.toSortedSet()?.toList()// 去重
+                ?.let { it ->
+                    setList(it.map { it.toString() })
+                    setItem(it[0].toString())
+                    viewModel.tempArea.value = it[0].toString()
+                }
+            setDescription("区")
+        }
     }
 }

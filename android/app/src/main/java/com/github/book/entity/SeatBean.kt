@@ -1,5 +1,7 @@
 package com.github.book.entity
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * description none
  * author ez_yang@qq.com
@@ -7,4 +9,13 @@ package com.github.book.entity
  * version 1.0
  * update none
  **/
-data class SeatBean(var floor: String, var area: String, var no: Int, var isBook: Boolean)
+data class SeatBean(
+//    @Expose(deserialize = false)
+    val id: Int,
+//    @Transient
+    val floor: Int,
+    val area: String,
+    @SerializedName("number")
+    val no: Int,
+    val statusList: List<Status>
+)

@@ -2,8 +2,14 @@ package com.github.book
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.book.entity.SearchResponse
 import com.github.book.entity.SeatBean
-import org.jetbrains.annotations.TestOnly
+import com.github.book.network.RequestByOkhttp
+import com.google.gson.Gson
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Response
+import java.io.IOException
 
 /**
  * description none
@@ -18,6 +24,8 @@ class MainVM : ViewModel() {
     var tempFloor = MutableLiveData<String>()
     var tempArea = MutableLiveData<String>()
 
+    private var mOnRequest: OnRequest? = null
+
     init {
         loadData()
     }
@@ -30,15 +38,37 @@ class MainVM : ViewModel() {
         seatListLD.value = list
     }
 
-    @TestOnly
     private fun loadData() {
-        val list = mutableListOf(
-            SeatBean("1", "a", 1, true),
-            SeatBean("1", "a", 2, false),
-            SeatBean("1", "a", 3, false),
-            SeatBean("1", "b", 1, false),
-            SeatBean("2", "b", 4, false)
+        val list = mutableListOf<SeatBean>(
+////            SeatBean("1", "a", 1, true),
+////            SeatBean("1", "a", 2, false),
+////            SeatBean("1", "a", 3, false),
+////            SeatBean("1", "b", 1, false),
+////            SeatBean("2", "b", 4, false)
         )
+        RequestByOkhttp().get("http://47.106.89.121:8080/search", object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val myResponse = Gson().fromJson(response.body()?.string(), SearchResponse::class.java)
+                for (d in myResponse.data) {
+                    d.apply {
+                        seatListLD.value?.add(SeatBean(id, floor, area, number, statusList))
+                    }
+                }
+                mOnRequest?.onFinish()
+            }
+        })
         setSeatList(list)
+    }
+
+    interface OnRequest {
+        fun onFinish()
+    }
+
+    fun setOnRequest(onRequest: OnRequest) {
+        this.mOnRequest = onRequest
     }
 }

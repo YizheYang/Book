@@ -7,10 +7,10 @@ package com.github.book.entity
  * version 1.0
  * update none
  **/
-data class MyResponseData(
-    val id: String,
+data class User(
+    val id: Int,
     val account: String,
     val name: String,
     val password: String,
-    val timeId: String
+    val timeId: Int
 )
