@@ -90,7 +90,7 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
                 val json = Gson().toJson(
                     BookRequest(
                         seat.id,
-                        viewModel.userId,
+                        viewModel.user.id,
                         ((date + 1).toString() + formatTime(time) + "00").toLong(),
                         ((date + 1).toString() + formatTime(time + 1) + "00").toLong()
                     )

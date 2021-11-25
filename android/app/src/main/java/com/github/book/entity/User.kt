@@ -1,5 +1,7 @@
 package com.github.book.entity
 
+import java.io.Serializable
+
 /**
  * description none
  * author ez_yang@qq.com
@@ -13,4 +15,4 @@ data class User(
     val name: String,
     val password: String,
     val timeId: Int
-)
+) : Serializable

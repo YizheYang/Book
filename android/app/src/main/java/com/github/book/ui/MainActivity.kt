@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,15 +14,16 @@ import com.github.book.R
 import com.github.book.adapter.SeatAdapter
 import com.github.book.base.BaseActivity
 import com.github.book.entity.SeatBean
+import com.github.book.entity.User
 import com.github.book.widget.ComboBox
 
 class MainActivity : BaseActivity() {
 
     companion object {
         @JvmStatic
-        fun startActivity(context: Context, userId: Int) {
+        fun startActivity(context: Context, user: User) {
             val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra("userId", userId)
+            intent.putExtra("user", user)
             context.startActivity(intent)
         }
     }
@@ -31,6 +33,7 @@ class MainActivity : BaseActivity() {
     private lateinit var adapter: SeatAdapter
     private lateinit var cb_floor: ComboBox
     private lateinit var cb_area: ComboBox
+    private lateinit var tv_title: TextView
 
     private lateinit var seatFragment: SeatFragment
 
@@ -46,11 +49,13 @@ class MainActivity : BaseActivity() {
         recyclerView.adapter = adapter
         cb_floor = findViewById(R.id.cb_floor)
         cb_area = findViewById(R.id.cb_area)
+        tv_title = findViewById(R.id.tv_title)
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.userId = intent.getIntExtra("userId", -1)
+        viewModel.user = intent.extras?.get("user") as User
+        tv_title.text = tv_title.text.toString() + viewModel.user.name
         setListener()
         setObserver()
     }

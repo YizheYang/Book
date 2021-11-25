@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.book.entity.SearchResponse
 import com.github.book.entity.SeatBean
+import com.github.book.entity.User
 import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
@@ -24,7 +25,7 @@ class MainVM : ViewModel() {
 
     var tempFloor = MutableLiveData<String>()
     var tempArea = MutableLiveData<String>()
-    var userId = 0
+    lateinit var user:User
 
     private var mOnRequest: OnRequest? = null
 
