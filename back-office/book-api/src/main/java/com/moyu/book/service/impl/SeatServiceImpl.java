@@ -37,7 +37,6 @@ public class SeatServiceImpl implements SeatService {
         for (Library library : libraries){
             SeatVo seatVo = new SeatVo();
             copyLibrary(library, seatVo);
-            Status status = statusMapper.selectById(library.getStatusId());
             /**
              * 根据library的status_id找到所有的订单
              */

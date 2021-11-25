@@ -1,6 +1,9 @@
 package com.moyu.book.dao.pojo;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 /**
@@ -12,6 +15,7 @@ public class Onlinetime implements Serializable {
     /**
      * 
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
