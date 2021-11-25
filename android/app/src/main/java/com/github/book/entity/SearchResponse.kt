@@ -8,8 +8,8 @@ package com.github.book.entity
  * update none
  **/
 data class SearchResponse(
-    val success: String,
-    val code: String,
+    val success: Boolean,
+    val code: Int,
     val msg: String,
     val data: List<SearchResponseData>
 )

@@ -1,5 +1,6 @@
 package com.github.book
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.book.entity.SearchResponse
@@ -23,6 +24,7 @@ class MainVM : ViewModel() {
 
     var tempFloor = MutableLiveData<String>()
     var tempArea = MutableLiveData<String>()
+    var userId = 0
 
     private var mOnRequest: OnRequest? = null
 

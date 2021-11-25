@@ -69,8 +69,8 @@ class LoginActivity : BaseActivity() {
                 override fun onResponse(call: Call, response: Response) {
                     val myResponse = Gson().fromJson(response.body()?.string(), LoginResponse::class.java)
                     runOnUiThread {
-                        if (myResponse?.success == "true") {
-                            MainActivity.startActivity(this@LoginActivity, username)
+                        if (myResponse?.success == true) {
+                            MainActivity.startActivity(this@LoginActivity, myResponse.data.id)
                             Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
                             finish()
                         } else {

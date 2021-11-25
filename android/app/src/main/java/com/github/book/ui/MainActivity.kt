@@ -19,9 +19,9 @@ class MainActivity : BaseActivity() {
 
     companion object {
         @JvmStatic
-        fun startActivity(context: Context, username: String) {
+        fun startActivity(context: Context, userId: Int) {
             val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra("username", username)
+            intent.putExtra("userId", userId)
             context.startActivity(intent)
         }
     }
@@ -29,11 +29,11 @@ class MainActivity : BaseActivity() {
     private lateinit var viewModel: MainVM
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SeatAdapter
-    private lateinit var username: String
     private lateinit var cb_floor: ComboBox
     private lateinit var cb_area: ComboBox
 
     private lateinit var seatFragment: SeatFragment
+    private lateinit var bookFragment: BookFragment
 
     override fun getLayoutId() = R.layout.activity_main
 
@@ -51,7 +51,7 @@ class MainActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        username = intent.getStringExtra("username").toString()
+        viewModel.userId = intent.getIntExtra("userId", -1)
         setListener()
         setObserver()
     }
@@ -74,7 +74,7 @@ class MainActivity : BaseActivity() {
                 list: MutableList<SeatBean>,
                 position: Int
             ) {
-                showFragment(list[position])
+                showSeatFragment(list[position])
             }
         })
 
@@ -88,7 +88,7 @@ class MainActivity : BaseActivity() {
                     list: List<String>
                 ) {
                     list[position].let { s ->
-                        setItem(s)
+//                        setItem(s)
                         cb_area.apply {
                             viewModel.getSeatListLD().value
                                 ?.filter { it.floor.toString() == s }
@@ -96,7 +96,7 @@ class MainActivity : BaseActivity() {
                                 ?.toSortedSet()?.toList()// 去重
                                 ?.let { it ->
                                     setList(it.map { it.toString() })
-                                    setItem(it[0].toString())
+//                                    setItem(it[0].toString())
                                     viewModel.tempArea.value = it[0].toString()
                                 }
                         }
@@ -116,7 +116,7 @@ class MainActivity : BaseActivity() {
                     list: List<String>
                 ) {
                     list[position].let { s ->
-                        setItem(s)
+//                        setItem(s)
                         viewModel.tempArea.value = s
                     }
                 }
@@ -154,7 +154,7 @@ class MainActivity : BaseActivity() {
                 ?.toSortedSet()?.toList()// 去重
                 ?.let { it ->
                     setList(it.map { it.toString() })
-                    setItem(it[0].toString())
+//                    setItem(it[0].toString())
                     viewModel.tempFloor.value = it[0].toString()
                 }
             setDescription("层")
@@ -168,16 +168,21 @@ class MainActivity : BaseActivity() {
                 ?.toSortedSet()?.toList()// 去重
                 ?.let { it ->
                     setList(it.map { it.toString() })
-                    setItem(it[0].toString())
+//                    setItem(it[0].toString())
                     viewModel.tempArea.value = it[0].toString()
                 }
             setDescription("区")
         }
     }
 
-    private fun showFragment(seatBean: SeatBean) {
+    private fun showSeatFragment(seatBean: SeatBean) {
         seatFragment = SeatFragment(seatBean)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, seatFragment).commit()
+    }
+
+    private fun showBookFragment(seatBean: SeatBean) {
+        bookFragment = BookFragment(seatBean)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bookFragment).commit()
     }
 
 }

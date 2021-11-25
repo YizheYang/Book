@@ -41,6 +41,7 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
     fun setList(list: List<String>?) {
         list?.let {
             this.list = it
+            setItem(it[0])
         }
     }
 
@@ -76,6 +77,7 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
         listPopupWindow?.setAdapter(adapter)
         listPopupWindow?.anchorView = tv_item
         listPopupWindow?.setOnItemClickListener { parent, view, position, id ->
+            setItem(list[position])
             myClick?.onClick(parent, view, position, id, list)
             close()
         }
