@@ -39,15 +39,8 @@ class MainVM : ViewModel() {
     }
 
     private fun loadData() {
-        val list = mutableListOf<SeatBean>(
-////            SeatBean("1", "a", 1, true),
-////            SeatBean("1", "a", 2, false),
-////            SeatBean("1", "a", 3, false),
-////            SeatBean("1", "b", 1, false),
-////            SeatBean("2", "b", 4, false)
-        )
+        val list = mutableListOf<SeatBean>()
         RequestByOkhttp().get("http://47.106.89.121:8080/search", object : Callback {
-
             override fun onFailure(call: Call, e: IOException) {
             }
 

@@ -8,8 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.book.R
 import com.github.book.entity.SeatBean
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * description none
@@ -29,27 +27,23 @@ class SeatAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapte
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_seat, parent, false)
         val holder = SeatViewHolder(view)
         holder.itemView.setOnClickListener {
-            mOnChildrenClickListener?.onSeatClickListener(holder, holder.adapterPosition)
+            mOnChildrenClickListener?.onSeatClickListener(holder, list, holder.adapterPosition)
         }
         return holder
     }
 
     override fun onBindViewHolder(holder: SeatViewHolder, position: Int) {
         holder.no.text = list[position].no.toString()
-        val date = SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()
-        for (d in list[position].statusList) {
-            if (date in d.sDate..d.dDate) {
-                holder.no.setBackgroundColor(Color.argb(127, 199, 84, 80))
-                holder.itemView.isEnabled = false
-                return
-            }
+        if (list[position].isBook()) {
+            holder.no.setBackgroundColor(Color.argb(127, 199, 84, 80))
+//            holder.itemView.isEnabled = false
         }
     }
 
     override fun getItemCount() = list.size
 
     interface OnChildrenClickListener {
-        fun onSeatClickListener(holder: SeatViewHolder, position: Int)
+        fun onSeatClickListener(holder: SeatViewHolder, list: MutableList<SeatBean>, position: Int)
     }
 
     fun setOnChildrenClickListener(onChildrenClickListener: OnChildrenClickListener) {

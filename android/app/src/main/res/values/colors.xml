@@ -10,4 +10,6 @@
 
     <color name="trans">#0000</color>
     <color name="gray">#40555555</color>
+    <color name="trans_black">#40000000</color>
+
 </resources>

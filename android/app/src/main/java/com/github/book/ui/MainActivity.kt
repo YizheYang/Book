@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +33,8 @@ class MainActivity : BaseActivity() {
     private lateinit var cb_floor: ComboBox
     private lateinit var cb_area: ComboBox
 
+    private lateinit var seatFragment: SeatFragment
+
     override fun getLayoutId() = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +52,11 @@ class MainActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         username = intent.getStringExtra("username").toString()
+        setListener()
+        setObserver()
+    }
+
+    private fun setListener() {
         viewModel.setOnRequest(object : MainVM.OnRequest {
             override fun onFinish() {
                 if (viewModel.getSeatListLD().value?.size != 0) {
@@ -61,14 +67,14 @@ class MainActivity : BaseActivity() {
                 }
             }
         })
-        setListener()
-        setObserver()
-    }
 
-    private fun setListener() {
         adapter.setOnChildrenClickListener(object : SeatAdapter.OnChildrenClickListener {
-            override fun onSeatClickListener(holder: SeatAdapter.SeatViewHolder, position: Int) {
-                Toast.makeText(this@MainActivity, "$position", Toast.LENGTH_SHORT).show()
+            override fun onSeatClickListener(
+                holder: SeatAdapter.SeatViewHolder,
+                list: MutableList<SeatBean>,
+                position: Int
+            ) {
+                showFragment(list[position])
             }
         })
 
@@ -134,7 +140,7 @@ class MainActivity : BaseActivity() {
 
     private fun refreshList() {
         viewModel.getSeatListLD().value
-            ?.filter { it.floor.toString() == viewModel.tempFloor.value && it.area.toString() == viewModel.tempArea.value }
+            ?.filter { it.floor.toString() == viewModel.tempFloor.value && it.area == viewModel.tempArea.value }
             ?.let {
                 adapter.setList(it as MutableList<SeatBean>)
             }
@@ -168,4 +174,10 @@ class MainActivity : BaseActivity() {
             setDescription("区")
         }
     }
+
+    private fun showFragment(seatBean: SeatBean) {
+        seatFragment = SeatFragment(seatBean)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, seatFragment).commit()
+    }
+
 }
