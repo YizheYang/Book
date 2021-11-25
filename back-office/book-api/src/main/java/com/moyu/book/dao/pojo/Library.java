@@ -20,9 +20,14 @@ public class Library implements Serializable {
     private Integer floor;
 
     /**
+     * 区号
+     */
+    private String area;
+
+    /**
      * 座位号
      */
-    private String number;
+    private Integer number;
 
     /**
      * 座位状态id

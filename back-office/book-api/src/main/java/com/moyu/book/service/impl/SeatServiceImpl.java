@@ -9,7 +9,7 @@ import com.moyu.book.dao.pojo.Status;
 import com.moyu.book.dao.pojo.User;
 import com.moyu.book.service.SeatService;
 import com.moyu.book.vo.Result;
-import com.moyu.book.vo.Seat;
+import com.moyu.book.vo.SeatVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,29 +33,29 @@ public class SeatServiceImpl implements SeatService {
     public Result findAll() {
 
         List<Library> libraries = libraryMapper.selectList(new LambdaQueryWrapper<>());
-        List<Seat> seatList = new LinkedList<>();
+        List<SeatVo> seatVoList = new LinkedList<>();
         for (Library library : libraries){
-            Seat seat = new Seat();
-            copyLibrary(library,seat);
+            SeatVo seatVo = new SeatVo();
+            copyLibrary(library, seatVo);
             Status status = statusMapper.selectById(library.getStatusId());
-            copyStatus(status,seat);
-            User user = userMapper.selectById(status.getUserId());
-            user.setPassword(null);
-            seat.setUser(user);
-            seatList.add(seat);
+            /**
+             * 根据library的status_id找到所有的订单
+             */
+            LambdaQueryWrapper<Status> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Status::getStatusId,library.getStatusId());
+            List<Status> statusList = statusMapper.selectList(queryWrapper);
+            seatVo.setStatusList(statusList);
+            seatVoList.add(seatVo);
         }
-        return Result.success(seatList);
+        return Result.success(seatVoList);
     }
 
-    private void copyStatus(Status status, Seat seat) {
-        seat.setStatus(status.getStatus());
-        seat.setSdate(status.getSdate());
-        seat.setDdate(status.getDdate());
-    }
 
-    private void copyLibrary(Library library, Seat seat) {
-        seat.setId(library.getId());
-        seat.setFloor(library.getFloor());
-        seat.setNumber(library.getNumber());
+
+    private void copyLibrary(Library library, SeatVo seatVo) {
+        seatVo.setId(library.getId());
+        seatVo.setFloor(library.getFloor());
+        seatVo.setNumber(library.getNumber());
+        seatVo.setArea(library.getArea());
     }
 }
