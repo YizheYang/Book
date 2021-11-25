@@ -34,5 +34,9 @@ public class Status implements Serializable {
      */
     private Long userId;
 
+    /**
+     *
+     */
+    private Long statusId;
     private static final long serialVersionUID = 1L;
 }
