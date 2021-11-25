@@ -31,23 +31,35 @@ data class SeatBean(
         return false
     }
 
-    fun getLatelySDate(): Long {
+    fun getBookedSDate(): String {
         val date = SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()
+        val list = mutableListOf<Long>()
         for (d in statusList) {
             if (date in d.sDate..d.dDate) {
-                return d.sDate
+                list.add(d.sDate)
             }
         }
-        return 0L
+        val sb = StringBuilder()
+        for (s in list.map { it.toString().substring(8, 10) }) {
+            sb.append(s).append(",")
+        }
+        sb.deleteCharAt(sb.length - 1)
+        return sb.toString()
     }
 
-    fun getLatelyDDate(): Long {
+    fun getBookedDDate(): String {
         val date = SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()
+        val list = mutableListOf<Long>()
         for (d in statusList) {
             if (date in d.sDate..d.dDate) {
-                return d.dDate
+                list.add(d.dDate)
             }
         }
-        return 0L
+        val sb = StringBuilder()
+        for (s in list.map { it.toString().substring(8, 10) }) {
+            sb.append(s).append(",")
+        }
+        sb.deleteCharAt(sb.length - 1)
+        return sb.toString()
     }
 }

@@ -46,11 +46,11 @@ class SeatFragment(private val seat: SeatBean) : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
         id.text = id.text.toString() + seat.no.toString()
         if (seat.isBook()) {
-            status.text = status.text.toString() + "已预订"
-            sDate.text = sDate.text.toString() + seat.getLatelySDate().toString()
-            dDate.text = dDate.text.toString() + seat.getLatelyDDate().toString()
+            status.text = status.text.toString() + "无空位"
+            sDate.text = sDate.text.toString() + seat.getBookedSDate()
+            dDate.text = dDate.text.toString() + seat.getBookedDDate()
         } else {
-            status.text = status.text.toString() + "可预订"
+            status.text = status.text.toString() + "有空位"
         }
         setListener()
     }

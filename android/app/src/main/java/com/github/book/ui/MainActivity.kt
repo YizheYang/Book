@@ -33,7 +33,6 @@ class MainActivity : BaseActivity() {
     private lateinit var cb_area: ComboBox
 
     private lateinit var seatFragment: SeatFragment
-    private lateinit var bookFragment: BookFragment
 
     override fun getLayoutId() = R.layout.activity_main
 
@@ -88,7 +87,7 @@ class MainActivity : BaseActivity() {
                     list: List<String>
                 ) {
                     list[position].let { s ->
-//                        setItem(s)
+                        setItem(s)
                         cb_area.apply {
                             viewModel.getSeatListLD().value
                                 ?.filter { it.floor.toString() == s }
@@ -116,12 +115,13 @@ class MainActivity : BaseActivity() {
                     list: List<String>
                 ) {
                     list[position].let { s ->
-//                        setItem(s)
+                        setItem(s)
                         viewModel.tempArea.value = s
                     }
                 }
             })
         }
+
     }
 
     private fun setObserver() {
@@ -178,11 +178,6 @@ class MainActivity : BaseActivity() {
     private fun showSeatFragment(seatBean: SeatBean) {
         seatFragment = SeatFragment(seatBean)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, seatFragment).commit()
-    }
-
-    private fun showBookFragment(seatBean: SeatBean) {
-        bookFragment = BookFragment(seatBean)
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bookFragment).commit()
     }
 
 }

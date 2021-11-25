@@ -29,7 +29,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true">
 
             <TextView
                 android:id="@+id/tv_book_range"
@@ -55,7 +57,7 @@
                 android:id="@+id/btn_book_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="cancel"
+                android:text="取消"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_book_confirm"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +68,7 @@
                 android:id="@+id/btn_book_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="confirm"
+                android:text="确认"
                 app:layout_constraintBottom_toBottomOf="@+id/btn_book_cancel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btn_book_cancel"

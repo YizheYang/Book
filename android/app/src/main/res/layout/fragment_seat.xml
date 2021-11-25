@@ -17,26 +17,28 @@
     <com.github.book.widget.RadiusCardView
         android:layout_width="300dp"
         android:layout_height="400dp"
-        app:rcv_topLeftRadiu="20dp"
-        app:rcv_topRightRadiu="20dp"
-        app:rcv_bottomLeftRadiu="20dp"
-        app:rcv_bottomRightRadiu="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:rcv_bottomLeftRadiu="20dp"
+        app:rcv_bottomRightRadiu="20dp"
+        app:rcv_topLeftRadiu="20dp"
+        app:rcv_topRightRadiu="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true">
 
             <TextView
                 android:id="@+id/tv_seat_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="id："
+                android:text="座位编号："
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_seat_status"
                 app:layout_constraintStart_toStartOf="@+id/tv_seat_status" />
@@ -46,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="status："
+                android:text="状态："
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_seat_sDate"
                 app:layout_constraintStart_toStartOf="@+id/tv_seat_sDate" />
@@ -56,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="sdate："
+                android:text="开始时间："
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_seat_ddate"
                 app:layout_constraintStart_toStartOf="@+id/tv_seat_ddate" />
@@ -65,7 +67,7 @@
                 android:id="@+id/tv_seat_ddate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ddate："
+                android:text="结束时间："
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_seat_cancel"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,8 +80,7 @@
                 android:id="@+id/btn_seat_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="cancel"
-
+                android:text="取消"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_seat_book"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +91,7 @@
                 android:id="@+id/btn_seat_book"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="book"
+                android:text="预订"
                 app:layout_constraintBottom_toBottomOf="@id/btn_seat_cancel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btn_seat_cancel"

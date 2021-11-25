@@ -147,7 +147,8 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
         }
         val booked = mutableListOf<Int>()
         for (s in seat.statusList) {
-            booked.add(s.sDate.toString().substring(8, 10).toInt())
+            if (s.sDate.toString().substring(0, 8) == date.toString())
+                booked.add(s.sDate.toString().substring(8, 10).toInt())
         }
         return all - booked
     }
