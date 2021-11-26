@@ -1,6 +1,9 @@
 package com.moyu.book.dao.pojo;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 /**
@@ -12,6 +15,7 @@ public class User implements Serializable {
     /**
      * id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -32,6 +36,7 @@ public class User implements Serializable {
     /**
      * 时长id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long timeId;
 
     private static final long serialVersionUID = 1L;

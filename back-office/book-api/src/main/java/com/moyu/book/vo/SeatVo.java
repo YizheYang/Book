@@ -1,7 +1,8 @@
 package com.moyu.book.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.book.dao.pojo.Status;
-import com.moyu.book.dao.pojo.User;
 import lombok.Data;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class SeatVo {
     /**
      *
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      *楼层
