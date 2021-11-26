@@ -10,12 +10,12 @@ import com.google.gson.annotations.SerializedName
  * update none
  **/
 data class Status(
-    val id: Int,
+    val id: String,
     val status: Boolean,
     @SerializedName("sdate")
     val sDate: Long,
     @SerializedName("ddate")
     val dDate: Long,
-    val userId: Int,
-    val statusId: Int
+    val userId: String,
+    val statusId: String
 )

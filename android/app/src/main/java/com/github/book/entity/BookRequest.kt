@@ -10,8 +10,8 @@ import com.google.gson.annotations.SerializedName
  * update none
  **/
 data class BookRequest(
-    val libraryId: Int,
-    val userId: Int,
+    val libraryId: String,
+    val userId: String,
     @SerializedName("sdate")
     val sDate: Long,
     @SerializedName("ddate")

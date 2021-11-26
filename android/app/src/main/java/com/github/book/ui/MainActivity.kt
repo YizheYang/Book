@@ -3,6 +3,7 @@ package com.github.book.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
@@ -16,6 +17,7 @@ import com.github.book.base.BaseActivity
 import com.github.book.entity.SeatBean
 import com.github.book.entity.User
 import com.github.book.widget.ComboBox
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : BaseActivity() {
 
@@ -34,6 +36,7 @@ class MainActivity : BaseActivity() {
     private lateinit var cb_floor: ComboBox
     private lateinit var cb_area: ComboBox
     private lateinit var tv_title: TextView
+    private lateinit var fab: FloatingActionButton
 
     private lateinit var seatFragment: SeatFragment
 
@@ -50,11 +53,13 @@ class MainActivity : BaseActivity() {
         cb_floor = findViewById(R.id.cb_floor)
         cb_area = findViewById(R.id.cb_area)
         tv_title = findViewById(R.id.tv_title)
+        fab = findViewById(R.id.fab)
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.user = intent.extras?.get("user") as User
+        Log.d("TAG", "onStart: $viewModel")
         tv_title.text = tv_title.text.toString() + viewModel.user.name
         setListener()
         setObserver()
@@ -73,7 +78,7 @@ class MainActivity : BaseActivity() {
         })
 
         adapter.setOnChildrenClickListener(object : SeatAdapter.OnChildrenClickListener {
-            override fun onSeatClickListener(
+            override fun onSeatClick(
                 holder: SeatAdapter.SeatViewHolder,
                 list: MutableList<SeatBean>,
                 position: Int
@@ -127,6 +132,9 @@ class MainActivity : BaseActivity() {
             })
         }
 
+        fab.setOnClickListener {
+            SettingActivity.startActivity(this, viewModel.user)
+        }
     }
 
     private fun setObserver() {
@@ -169,6 +177,7 @@ class MainActivity : BaseActivity() {
     private fun initCBArea() {
         cb_area.apply {
             viewModel.getSeatListLD().value
+                ?.filter { it.floor.toString() == viewModel.tempFloor.value }
                 ?.map { it.area }// 取area值组成新list
                 ?.toSortedSet()?.toList()// 去重
                 ?.let { it ->
@@ -182,7 +191,7 @@ class MainActivity : BaseActivity() {
 
     private fun showSeatFragment(seatBean: SeatBean) {
         seatFragment = SeatFragment(seatBean)
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, seatFragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container_main, seatFragment).commit()
     }
 
 }

@@ -10,9 +10,9 @@ import java.io.Serializable
  * update none
  **/
 data class User(
-    val id: Int,
+    val id: String,
     val account: String,
     val name: String,
     val password: String,
-    val timeId: Int
+    val timeId: String
 ) : Serializable

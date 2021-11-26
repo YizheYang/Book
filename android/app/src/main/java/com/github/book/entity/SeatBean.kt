@@ -13,7 +13,7 @@ import java.util.*
  **/
 data class SeatBean(
 //    @Expose(deserialize = false)
-    val id: Int,
+    val id: String,
 //    @Transient
     val floor: Int,
     val area: String,

@@ -116,6 +116,7 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
                         }
                     }
                 })
+                viewModel.loadData()
             } else {
                 Toast.makeText(requireContext(), "选择时间出错，请重新选择", Toast.LENGTH_SHORT).show()
             }
@@ -147,7 +148,7 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
         }
         val booked = mutableListOf<Int>()
         for (s in seat.statusList) {
-            if (s.sDate.toString().substring(0, 8) == date.toString())
+            if (s.sDate.toString().substring(0, 8) == (date + 1L).toString())
                 booked.add(s.sDate.toString().substring(8, 10).toInt())
         }
         return all - booked

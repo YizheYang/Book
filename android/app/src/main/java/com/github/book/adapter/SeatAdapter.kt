@@ -20,14 +20,14 @@ class SeatAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapte
     private var mOnChildrenClickListener: OnChildrenClickListener? = null
 
     inner class SeatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val no: TextView = itemView.findViewById(R.id.tv_item_no)
+        val no: TextView = itemView.findViewById(R.id.tv_item_seat_no)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeatViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_seat, parent, false)
         val holder = SeatViewHolder(view)
         holder.itemView.setOnClickListener {
-            mOnChildrenClickListener?.onSeatClickListener(holder, list, holder.adapterPosition)
+            mOnChildrenClickListener?.onSeatClick(holder, list, holder.adapterPosition)
         }
         return holder
     }
@@ -36,14 +36,13 @@ class SeatAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapte
         holder.no.text = list[position].no.toString()
         if (list[position].isBook()) {
             holder.no.setBackgroundColor(Color.argb(127, 199, 84, 80))
-//            holder.itemView.isEnabled = false
         }
     }
 
     override fun getItemCount() = list.size
 
     interface OnChildrenClickListener {
-        fun onSeatClickListener(holder: SeatViewHolder, list: MutableList<SeatBean>, position: Int)
+        fun onSeatClick(holder: SeatViewHolder, list: MutableList<SeatBean>, position: Int)
     }
 
     fun setOnChildrenClickListener(onChildrenClickListener: OnChildrenClickListener) {

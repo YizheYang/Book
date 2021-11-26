@@ -66,7 +66,7 @@ class SeatFragment(private val seat: SeatBean) : Fragment() {
 
         btn_book.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, BookFragment(seat)).commit()
+                .replace(R.id.fragment_container_main, BookFragment(seat)).commit()
             remove()
         }
     }

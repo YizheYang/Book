@@ -1,6 +1,5 @@
 package com.github.book
 
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.book.entity.SearchResponse
@@ -12,6 +11,7 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import java.io.Serializable
 
 /**
  * description none
@@ -20,12 +20,12 @@ import java.io.IOException
  * version 1.0
  * update none
  **/
-class MainVM : ViewModel() {
+class MainVM : ViewModel(){
     private val seatListLD = MutableLiveData<MutableList<SeatBean>>()
 
     var tempFloor = MutableLiveData<String>()
     var tempArea = MutableLiveData<String>()
-    lateinit var user:User
+    lateinit var user: User
 
     private var mOnRequest: OnRequest? = null
 
@@ -37,11 +37,11 @@ class MainVM : ViewModel() {
         return seatListLD
     }
 
-    fun setSeatList(list: MutableList<SeatBean>) {
+    private fun setSeatList(list: MutableList<SeatBean>) {
         seatListLD.value = list
     }
 
-    private fun loadData() {
+    fun loadData() {
         val list = mutableListOf<SeatBean>()
         RequestByOkhttp().get("http://47.106.89.121:8080/search", object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -60,7 +60,7 @@ class MainVM : ViewModel() {
         setSeatList(list)
     }
 
-    interface OnRequest {
+    interface OnRequest{
         fun onFinish()
     }
 

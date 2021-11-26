@@ -8,7 +8,7 @@ package com.github.book.entity
  * update none
  **/
 data class SearchResponseData(
-    val id: Int,
+    val id: String,
     val floor: Int,
     val area: String,
     val number: Int,

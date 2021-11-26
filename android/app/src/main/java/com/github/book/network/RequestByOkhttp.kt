@@ -21,7 +21,6 @@ class RequestByOkhttp {
                 .post(requestBody)
                 .build()
             client.newCall(request).enqueue(callback)
-            client.newCall(request).execute()
         }
     }
 
@@ -32,7 +31,6 @@ class RequestByOkhttp {
                 .url(ip)
                 .build()
             client.newCall(request).enqueue(callback)
-            client.newCall(request).execute()
         }
     }
 }
