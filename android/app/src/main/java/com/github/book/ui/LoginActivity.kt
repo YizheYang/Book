@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.github.book.Constant
 import com.github.book.R
 import com.github.book.base.BaseActivity
 import com.github.book.entity.LoginRequest
@@ -11,9 +12,7 @@ import com.github.book.entity.LoginResponse
 import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.Response
-import java.io.IOException
 
 /**
  * description none
@@ -56,29 +55,21 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun request(username: String, password: String) {
-        RequestByOkhttp().post(
-            "http://47.106.89.121:8080/login",
-            Gson().toJson(LoginRequest(username, password)),
-            object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    runOnUiThread {
-                        Toast.makeText(this@LoginActivity, "请求失败，请检查网络或者请求地址", Toast.LENGTH_SHORT).show()
+        val json = Gson().toJson(LoginRequest(username, password))
+        RequestByOkhttp().post(Constant.login, json, object : RequestByOkhttp.MyCallBack(this) {
+            override fun onResponse(call: Call, response: Response) {
+                val myResponse = Gson().fromJson(response.body()?.string(), LoginResponse::class.java)
+                runOnUiThread {
+                    if (myResponse?.success == true) {
+                        MainActivity.startActivity(this@LoginActivity, myResponse.data)
+                        Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, "账号或密码错误", Toast.LENGTH_SHORT).show()
                     }
                 }
-
-                override fun onResponse(call: Call, response: Response) {
-                    val myResponse = Gson().fromJson(response.body()?.string(), LoginResponse::class.java)
-                    runOnUiThread {
-                        if (myResponse?.success == true) {
-                            MainActivity.startActivity(this@LoginActivity, myResponse.data)
-                            Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
-                            finish()
-                        } else {
-                            Toast.makeText(this@LoginActivity, "账号或密码错误", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            })
+            }
+        })
     }
 
 }

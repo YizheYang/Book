@@ -44,13 +44,13 @@ class SeatFragment(private val seat: SeatBean) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
-        id.text = id.text.toString() + seat.no.toString()
+        id.text = "座位编号：${seat.no}"
         if (seat.isBook()) {
-            status.text = status.text.toString() + "无空位"
-            sDate.text = sDate.text.toString() + seat.getBookedSDate()
-            dDate.text = dDate.text.toString() + seat.getBookedDDate()
+            status.text = "状态：无空位"
+            sDate.text = "开始时间：${seat.getBookedSDate()}"
+            dDate.text = "结束时间：${seat.getBookedDDate()}"
         } else {
-            status.text = status.text.toString() + "有空位"
+            status.text = "状态：有空位"
         }
         setListener()
     }

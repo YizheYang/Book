@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.book.R
-import com.github.book.entity.SeatBean
+import com.github.book.entity.OrderBean
 
 /**
  * description none
@@ -15,7 +15,7 @@ import com.github.book.entity.SeatBean
  * version 1.0
  * update none
  **/
-class OrderAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
+class OrderAdapter(private var list: MutableList<OrderBean>) : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
     private var mOnChildrenClickListener: OnChildrenClickListener? = null
 
@@ -28,20 +28,20 @@ class OrderAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapt
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_order, parent, false)
         val holder = OrderViewHolder(view)
         holder.itemView.setOnClickListener {
-            mOnChildrenClickListener?.onItemClick()
+            mOnChildrenClickListener?.onItemClick(holder.adapterPosition)
         }
         return holder
     }
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         holder.no.text = (position + 1).toString()
-
+        holder.time.text = "${list[position].sDate}——${list[position].dDate}"
     }
 
     override fun getItemCount() = list.size
 
     interface OnChildrenClickListener {
-        fun onItemClick()
+        fun onItemClick(position: Int)
     }
 
     fun setOnChildrenClickListener(onChildrenClickListener: OnChildrenClickListener) {

@@ -1,5 +1,6 @@
 package com.github.book
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.book.entity.SearchResponse
@@ -8,10 +9,7 @@ import com.github.book.entity.User
 import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.Response
-import java.io.IOException
-import java.io.Serializable
 
 /**
  * description none
@@ -20,7 +18,7 @@ import java.io.Serializable
  * version 1.0
  * update none
  **/
-class MainVM : ViewModel(){
+class MainVM : ViewModel() {
     private val seatListLD = MutableLiveData<MutableList<SeatBean>>()
 
     var tempFloor = MutableLiveData<String>()
@@ -43,10 +41,7 @@ class MainVM : ViewModel(){
 
     fun loadData() {
         val list = mutableListOf<SeatBean>()
-        RequestByOkhttp().get("http://47.106.89.121:8080/search", object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-            }
-
+        RequestByOkhttp().get(Constant.search, object : RequestByOkhttp.MyCallBack(null) {
             override fun onResponse(call: Call, response: Response) {
                 val myResponse = Gson().fromJson(response.body()?.string(), SearchResponse::class.java)
                 for (d in myResponse.data) {
@@ -60,7 +55,7 @@ class MainVM : ViewModel(){
         setSeatList(list)
     }
 
-    interface OnRequest{
+    interface OnRequest {
         fun onFinish()
     }
 

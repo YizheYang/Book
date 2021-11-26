@@ -1,6 +1,9 @@
 package com.github.book.network
 
+import android.content.Context
+import android.widget.Toast
 import okhttp3.*
+import java.io.IOException
 import kotlin.concurrent.thread
 
 /**
@@ -32,5 +35,16 @@ class RequestByOkhttp {
                 .build()
             client.newCall(request).enqueue(callback)
         }
+    }
+
+    open class MyCallBack(private val context: Context?) : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            context?.let {
+                Toast.makeText(it, "请求失败，请检查网络或者请求地址", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onResponse(call: Call, response: Response) {}
+
     }
 }

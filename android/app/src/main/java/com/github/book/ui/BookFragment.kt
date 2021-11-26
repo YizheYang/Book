@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.github.book.Constant
 import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.entity.BookRequest
@@ -22,9 +23,7 @@ import com.github.book.network.RequestByOkhttp
 import com.github.book.widget.ComboBox
 import com.google.gson.Gson
 import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.Response
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -50,9 +49,8 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             when (msg.what) {
-                1 -> Toast.makeText(requireContext(), "请求失败，请检查网络或者请求地址", Toast.LENGTH_SHORT).show()
-                2 -> Toast.makeText(requireContext(), "预订成功", Toast.LENGTH_SHORT).show()
-                3 -> Toast.makeText(requireContext(), "请求失败，可能是没位置了", Toast.LENGTH_SHORT).show()
+                1 -> Toast.makeText(requireContext(), "预订成功", Toast.LENGTH_SHORT).show()
+                2 -> Toast.makeText(requireContext(), "请求失败，可能是没位置了", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -70,7 +68,7 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
         date = SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).toLong()
-        title.text = title.text.toString() + (date + 1L)
+        title.text = "预订的范围是${date + 1L}"
         comboBox.setList(getFreeTime().map { it.toString() })
         comboBox.setItem("")
         comboBox.setDescription("时")
@@ -95,24 +93,14 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
                         ((date + 1).toString() + formatTime(time + 1) + "00").toLong()
                     )
                 )
-                RequestByOkhttp().post("http://47.106.89.121:8080/reserve", json, object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        handler.sendMessage(Message().apply {
-                            what = 1
-                        })
-                    }
-
+                RequestByOkhttp().post(Constant.reserve, json, object : RequestByOkhttp.MyCallBack(requireContext()) {
                     override fun onResponse(call: Call, response: Response) {
                         val myResponse = Gson().fromJson(response.body()?.string(), BookResponse::class.java)
                         if (myResponse.success) {
-                            handler.sendMessage(Message().apply {
-                                what = 2
-                            })
+                            handler.sendEmptyMessage(1)
                             remove()
                         } else {
-                            handler.sendMessage(Message().apply {
-                                what = 3
-                            })
+                            handler.sendEmptyMessage(2)
                         }
                     }
                 })

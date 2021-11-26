@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import androidx.fragment.app.ListFragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.MainVM
 import com.github.book.R
@@ -24,7 +23,7 @@ class SettingActivity : BaseActivity() {
     private lateinit var viewModel: MainVM
 
     private lateinit var pwdFragment: PwdFragment
-    private lateinit var listFragment: ListFragment
+    private lateinit var orderFragment: OrderFragment
 
     companion object {
         @JvmStatic
@@ -58,8 +57,8 @@ class SettingActivity : BaseActivity() {
         }
 
         btn_list.setOnClickListener {
-            listFragment = ListFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container_setting, listFragment).commit()
+            orderFragment = OrderFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container_setting, orderFragment).commit()
         }
     }
 }

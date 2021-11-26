@@ -59,8 +59,7 @@ class MainActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.user = intent.extras?.get("user") as User
-        Log.d("TAG", "onStart: $viewModel")
-        tv_title.text = tv_title.text.toString() + viewModel.user.name
+        tv_title.text = "欢迎！${viewModel.user.name}"
         setListener()
         setObserver()
     }
@@ -105,7 +104,6 @@ class MainActivity : BaseActivity() {
                                 ?.toSortedSet()?.toList()// 去重
                                 ?.let { it ->
                                     setList(it.map { it.toString() })
-//                                    setItem(it[0].toString())
                                     viewModel.tempArea.value = it[0].toString()
                                 }
                         }
@@ -167,7 +165,6 @@ class MainActivity : BaseActivity() {
                 ?.toSortedSet()?.toList()// 去重
                 ?.let { it ->
                     setList(it.map { it.toString() })
-//                    setItem(it[0].toString())
                     viewModel.tempFloor.value = it[0].toString()
                 }
             setDescription("层")
@@ -182,7 +179,6 @@ class MainActivity : BaseActivity() {
                 ?.toSortedSet()?.toList()// 去重
                 ?.let { it ->
                     setList(it.map { it.toString() })
-//                    setItem(it[0].toString())
                     viewModel.tempArea.value = it[0].toString()
                 }
             setDescription("区")
