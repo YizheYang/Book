@@ -1,5 +1,6 @@
 package com.moyu.book.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.moyu.book.dao.mapper.LibraryMapper;
 import com.moyu.book.dao.mapper.StatusMapper;
 import com.moyu.book.dao.mapper.UserMapper;
@@ -8,8 +9,12 @@ import com.moyu.book.service.ReserveService;
 import com.moyu.book.vo.ErrorCode;
 import com.moyu.book.vo.Result;
 import com.moyu.book.vo.params.ReserveParam;
+import com.moyu.book.vo.params.UnsubscribeParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReserveServiceImpl implements ReserveService {
@@ -36,14 +41,42 @@ public class ReserveServiceImpl implements ReserveService {
 
         Status status = new Status();
         Long statusId = libraryMapper.selectById(libraryId).getStatusId();
+
         status.setStatus(true);
         status.setStatusId(statusId);
         status.setSdate(sdate);
         status.setDdate(ddate);
         status.setUserId(userId);
+        /**
+         * 去除再同一时间内，预定多个座位的情况
+         */
+        LambdaQueryWrapper<Status> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Status::getUserId,status.getUserId());
+        List<Status> statusList = statusMapper.selectList(queryWrapper);
+        for (Status status1 : statusList){
+            if (Objects.equals(status1.getSdate(), status.getSdate()))
+                return Result.fail(ErrorCode.FAIL_RESERVE.getCode(), ErrorCode.FAIL_RESERVE.getMsg()+"同一时间重复预定多个座位");
+        }
+
         int insert = statusMapper.insert(status);
         if (insert == 0)
-            return Result.fail(ErrorCode.FAIL_RESERVE.getCode(), ErrorCode.NO_LOGIN.getMsg());
+            return Result.fail(ErrorCode.FAIL_RESERVE.getCode(), ErrorCode.FAIL_RESERVE.getMsg());
         return Result.success(null);
+    }
+
+    @Override
+    public Result unsubscribe(UnsubscribeParam unsubscribeParam) {
+
+        Long orderId = unsubscribeParam.getOrderId();
+        Long userId = unsubscribeParam.getUserId();
+        LambdaQueryWrapper<Status> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Status::getId,orderId);
+        queryWrapper.eq(Status::getUserId,userId);
+        Status statusUpdate = new Status();
+        statusUpdate.setStatus(false);
+        int update = statusMapper.update(statusUpdate, queryWrapper);
+        if (update!=0)
+            return Result.success(update);
+        return Result.fail(90004,"找不到该订单");
     }
 }
