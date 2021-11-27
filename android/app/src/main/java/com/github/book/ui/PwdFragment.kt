@@ -1,15 +1,26 @@
 package com.github.book.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.github.book.Constant
 import com.github.book.MainVM
 import com.github.book.R
+import com.github.book.entity.LoginRequest
+import com.github.book.entity.PwdResponse
+import com.github.book.network.RequestByOkhttp
+import com.google.gson.Gson
+import okhttp3.Call
+import okhttp3.Response
 
 /**
  * description none
@@ -25,6 +36,18 @@ class PwdFragment : Fragment() {
     private lateinit var background: View
 
     private lateinit var viewModel: MainVM
+
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when (msg.what) {
+                1 -> {
+                    Toast.makeText(requireContext(), "密码修改成功", Toast.LENGTH_SHORT).show()
+                    remove()
+                }
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_pwd, container, false)
@@ -42,7 +65,15 @@ class PwdFragment : Fragment() {
 
     private fun setListener() {
         btn_confirm.setOnClickListener {
-//            TODO("修改密码")
+            val json = Gson().toJson(LoginRequest(viewModel.user.account, et_new.text.toString()))
+            RequestByOkhttp().post(Constant.expassword, json, object : RequestByOkhttp.MyCallBack(requireContext()) {
+                override fun onResponse(call: Call, response: Response) {
+                    val myResponse = Gson().fromJson(response.body()?.string(), PwdResponse::class.java)
+                    if (myResponse.success) {
+                        handler.sendEmptyMessage(1)
+                    }
+                }
+            })
         }
 
         background.setOnClickListener {
