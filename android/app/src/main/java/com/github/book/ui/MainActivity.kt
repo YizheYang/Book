@@ -69,6 +69,18 @@ class MainActivity : BaseActivity() {
         setObserver()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            1 -> {
+                if (resultCode == RESULT_OK) {
+                    LoginActivity.startActivity(this)
+                    finish()
+                }
+            }
+        }
+    }
+
     private fun setListener() {
         viewModel.setOnRequest(object : MainVM.OnRequest {
             override fun onFinish() {
@@ -140,7 +152,7 @@ class MainActivity : BaseActivity() {
         }
 
         fab.setOnClickListener {
-            SettingActivity.startActivity(this, viewModel.user)
+            SettingActivity.startActivityForResult(this, viewModel.user)
         }
 
         sfl.setOnRefreshListener {

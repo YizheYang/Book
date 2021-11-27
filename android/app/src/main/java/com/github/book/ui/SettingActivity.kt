@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.MainVM
 import com.github.book.R
@@ -25,12 +26,14 @@ class SettingActivity : BaseActivity() {
     private lateinit var pwdFragment: PwdFragment
     private lateinit var orderFragment: OrderFragment
 
+    private lateinit var btn_logout: Button
+
     companion object {
         @JvmStatic
-        fun startActivity(context: Context, user: User) {
+        fun startActivityForResult(context: Context, user: User) {
             val intent = Intent(context, SettingActivity::class.java)
             intent.putExtra("user", user)
-            context.startActivity(intent)
+            (context as AppCompatActivity).startActivityForResult(intent, 1)
         }
     }
 
@@ -42,6 +45,7 @@ class SettingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         btn_pwd = findViewById(R.id.btn_setting_pwd)
         btn_list = findViewById(R.id.btn_setting_list)
+        btn_logout = findViewById(R.id.btn_setting_logout)
     }
 
     override fun onStart() {
@@ -61,6 +65,11 @@ class SettingActivity : BaseActivity() {
         btn_list.setOnClickListener {
             orderFragment = OrderFragment()
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container_setting, orderFragment).commit()
+        }
+
+        btn_logout.setOnClickListener {
+            setResult(RESULT_OK)
+            finish()
         }
     }
 }

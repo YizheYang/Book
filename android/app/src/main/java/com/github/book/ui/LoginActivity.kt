@@ -1,5 +1,7 @@
 package com.github.book.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
@@ -13,6 +15,7 @@ import com.github.book.database.AccountDatabase
 import com.github.book.entity.AccountBean
 import com.github.book.entity.LoginRequest
 import com.github.book.entity.LoginResponse
+import com.github.book.entity.User
 import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
@@ -34,6 +37,14 @@ class LoginActivity : BaseActivity() {
     private lateinit var cb_password: CheckBox
 
     private lateinit var database: AccountDatabase
+
+    companion object{
+        @JvmStatic
+        fun startActivity(context: Context) {
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     override fun getLayoutId() = R.layout.activity_login
 
