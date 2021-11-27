@@ -21,6 +21,9 @@ interface AccountDao {
     @Query("SELECT * FROM account WHERE account==:account")
     fun getAccount(account: String): AccountBean?
 
+    @Query("SELECT * FROM account")
+    fun getAllAccount(): List<AccountBean>?
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateAccount(accountBean: AccountBean)
 

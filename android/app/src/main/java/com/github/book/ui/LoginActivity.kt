@@ -3,10 +3,8 @@ package com.github.book.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.room.Room
 import com.github.book.Constant
 import com.github.book.R
@@ -15,11 +13,11 @@ import com.github.book.database.AccountDatabase
 import com.github.book.entity.AccountBean
 import com.github.book.entity.LoginRequest
 import com.github.book.entity.LoginResponse
-import com.github.book.entity.User
 import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
+import java.util.*
 
 /**
  * description none
@@ -35,10 +33,13 @@ class LoginActivity : BaseActivity() {
     private lateinit var btn_signin: Button
     private lateinit var cb_account: CheckBox
     private lateinit var cb_password: CheckBox
+    private lateinit var ib_list: ImageButton
 
     private lateinit var database: AccountDatabase
+    private var listPopupWindow: ListPopupWindow? = null
+    private lateinit var inputMethodManager: InputMethodManager
 
-    companion object{
+    companion object {
         @JvmStatic
         fun startActivity(context: Context) {
             val intent = Intent(context, LoginActivity::class.java)
@@ -58,6 +59,8 @@ class LoginActivity : BaseActivity() {
         btn_signin = findViewById(R.id.btn_signin)
         cb_account = findViewById(R.id.cb_rememberAccount)
         cb_password = findViewById(R.id.cb_rememberPassword)
+        ib_list = findViewById(R.id.ib_accountList)
+        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
     override fun onStart() {
@@ -87,6 +90,58 @@ class LoginActivity : BaseActivity() {
         btn_signin.setOnClickListener {
             Toast.makeText(this, "sign in", Toast.LENGTH_SHORT).show()
         }
+
+        ib_list.setOnClickListener {
+            val list = database.getAccountDao().getAllAccount()
+            list?.let {
+                if (listPopupWindow == null) {
+                    listPopupWindow = ListPopupWindow(this)
+                    show(it)
+                    inputMethodManager.hideSoftInputFromWindow(
+                        et_account.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                    )
+                } else {
+                    close()
+                }
+            }
+        }
+    }
+
+    private fun show(list: List<AccountBean>) {
+        val adapter = SimpleAdapter(
+            this,
+            getStandardList(list),
+            R.layout.item_listpopupwindow,
+            arrayOf("object"),
+            intArrayOf(R.id.tv_listPopupWindow)
+        )
+        listPopupWindow?.setAdapter(adapter)
+        listPopupWindow?.anchorView = et_account
+        listPopupWindow?.setOnItemClickListener { parent, view, position, id ->
+            et_account.setText(list[position].account)
+            cb_account.isChecked = true
+            et_password.setText(list[position].password)
+            cb_password.isChecked = list[position].password != null
+            close()
+        }
+        listPopupWindow?.show()
+    }
+
+    private fun close() {
+        listPopupWindow?.dismiss()
+        listPopupWindow = null
+    }
+
+    private fun getStandardList(l: List<AccountBean>): List<Map<String, Any>> {
+        val list = mutableListOf<Map<String, Any>>()
+        var map: MutableMap<String, Any>
+        for (i in l.indices) {
+            map = HashMap()
+            map["object"] = l[i].account
+            list.add(map)
+        }
+        return list
     }
 
     private fun request(username: String, password: String) {
