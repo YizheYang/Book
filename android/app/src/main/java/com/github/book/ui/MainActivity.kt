@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.adapter.SeatAdapter
@@ -36,6 +38,7 @@ class MainActivity : BaseActivity() {
     private lateinit var cb_area: ComboBox
     private lateinit var tv_title: TextView
     private lateinit var fab: FloatingActionButton
+    private lateinit var sfl: SwipeRefreshLayout
 
     private lateinit var seatFragment: SeatFragment
 
@@ -45,11 +48,12 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sfl = findViewById(R.id.sfl)
+        sfl.isRefreshing = true
         viewModel = ViewModelProvider(this)[MainVM::class.java]
         recyclerView = findViewById(R.id.rv)
-        val layoutManager = GridLayoutManager(this, 3)
         adapter = SeatAdapter(viewModel.getSeatListLD().value!!)
-        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = adapter
         cb_floor = findViewById(R.id.cb_floor)
         cb_area = findViewById(R.id.cb_area)
@@ -73,6 +77,10 @@ class MainActivity : BaseActivity() {
                         initCBFloor()
                         initCBArea()
                     }
+                }
+                sfl.isRefreshing = false
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "数据刷新成功", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -133,6 +141,11 @@ class MainActivity : BaseActivity() {
 
         fab.setOnClickListener {
             SettingActivity.startActivity(this, viewModel.user)
+        }
+
+        sfl.setOnRefreshListener {
+            sfl.isRefreshing = true
+            viewModel.loadData()
         }
     }
 
