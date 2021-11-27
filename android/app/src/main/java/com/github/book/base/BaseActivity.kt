@@ -22,11 +22,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getLayoutId().apply {
-            if (this != 0) {
-                setContentView(this)
-            }
-        }
+        setContentView(getLayoutId())
         autoAdjustStatusBarText()
     }
 

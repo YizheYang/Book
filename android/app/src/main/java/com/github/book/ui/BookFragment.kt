@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.Constant
 import com.github.book.MainVM
 import com.github.book.R
+import com.github.book.base.BaseFragment
 import com.github.book.entity.BookRequest
 import com.github.book.entity.BookResponse
 import com.github.book.entity.SeatBean
@@ -34,7 +32,7 @@ import java.util.*
  * version 1.0
  * update none
  **/
-class BookFragment(private val seat: SeatBean) : Fragment() {
+class BookFragment(private val seat: SeatBean) : BaseFragment() {
     private lateinit var background: View
     private lateinit var title: TextView
     private lateinit var comboBox: ComboBox
@@ -55,14 +53,14 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_book, container, false)
+    override fun getLayoutId() = R.layout.fragment_book
+
+    override fun initView(view: View, savedInstanceState: Bundle?) {
         background = view.findViewById(R.id.view_book_background)
         title = view.findViewById(R.id.tv_book_range)
         comboBox = view.findViewById(R.id.cbb_book_choose)
         btn_cancel = view.findViewById(R.id.btn_book_cancel)
         btn_confirm = view.findViewById(R.id.btn_book_confirm)
-        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

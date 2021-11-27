@@ -4,17 +4,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.Constant
 import com.github.book.MainVM
 import com.github.book.R
+import com.github.book.base.BaseFragment
 import com.github.book.entity.LoginRequest
 import com.github.book.entity.PwdResponse
 import com.github.book.network.RequestByOkhttp
@@ -29,7 +27,7 @@ import okhttp3.Response
  * version 1.0
  * update none
  **/
-class PwdFragment : Fragment() {
+class PwdFragment : BaseFragment() {
     private lateinit var et_new: EditText
     private lateinit var btn_cancel: Button
     private lateinit var btn_confirm: Button
@@ -49,13 +47,13 @@ class PwdFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_pwd, container, false)
+    override fun getLayoutId() = R.layout.fragment_pwd
+
+    override fun initView(view: View, savedInstanceState: Bundle?) {
         et_new = view.findViewById(R.id.et_pwd_new)
         btn_cancel = view.findViewById(R.id.btn_pwd_cancel)
         btn_confirm = view.findViewById(R.id.btn_pwd_confirm)
         background = view.findViewById(R.id.view_pwd_background)
-        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -5,17 +5,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.github.book.Constant
 import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.adapter.OrderAdapter
+import com.github.book.base.BaseFragment
 import com.github.book.entity.BookResponse
 import com.github.book.entity.OrderBean
 import com.github.book.entity.OrderRequest
@@ -34,7 +32,7 @@ import java.util.*
  * version 1.0
  * update none
  **/
-class OrderFragment : Fragment() {
+class OrderFragment : BaseFragment() {
     private lateinit var viewModel: MainVM
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: OrderAdapter
@@ -53,11 +51,11 @@ class OrderFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_order, container, false)
+    override fun getLayoutId() = R.layout.fragment_order
+
+    override fun initView(view: View, savedInstanceState: Bundle?) {
         recyclerView = view.findViewById(R.id.rv_list)
         background = view.findViewById(R.id.view_order_background)
-        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

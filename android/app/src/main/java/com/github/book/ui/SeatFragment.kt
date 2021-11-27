@@ -1,15 +1,13 @@
 package com.github.book.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.MainVM
 import com.github.book.R
+import com.github.book.base.BaseFragment
 import com.github.book.entity.SeatBean
 
 /**
@@ -19,7 +17,7 @@ import com.github.book.entity.SeatBean
  * version 1.0
  * update none
  **/
-class SeatFragment(private val seat: SeatBean) : Fragment() {
+class SeatFragment(private val seat: SeatBean) : BaseFragment() {
     private lateinit var background: View
     private lateinit var id: TextView
     private lateinit var status: TextView
@@ -30,8 +28,9 @@ class SeatFragment(private val seat: SeatBean) : Fragment() {
 
     private lateinit var viewModel: MainVM
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_seat, container, false)
+    override fun getLayoutId() = R.layout.fragment_seat
+
+    override fun initView(view: View, savedInstanceState: Bundle?) {
         background = view.findViewById(R.id.view_seat_background)
         id = view.findViewById(R.id.tv_seat_id)
         status = view.findViewById(R.id.tv_seat_status)
@@ -39,7 +38,6 @@ class SeatFragment(private val seat: SeatBean) : Fragment() {
         dDate = view.findViewById(R.id.tv_seat_ddate)
         btn_cancel = view.findViewById(R.id.btn_seat_cancel)
         btn_book = view.findViewById(R.id.btn_seat_book)
-        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
