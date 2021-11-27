@@ -7,4 +7,7 @@ package com.github.book.entity
  * version 1.0
  * update none
  **/
-data class LoginRequest(val account: String, val password: String)
+data class LoginRequest(
+    val account: String,
+    val password: String
+)

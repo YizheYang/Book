@@ -59,7 +59,7 @@ class BookFragment(private val seat: SeatBean) : Fragment() {
         val view = inflater.inflate(R.layout.fragment_book, container, false)
         background = view.findViewById(R.id.view_book_background)
         title = view.findViewById(R.id.tv_book_range)
-        comboBox = view.findViewById(R.id.cb_book_choose)
+        comboBox = view.findViewById(R.id.cbb_book_choose)
         btn_cancel = view.findViewById(R.id.btn_book_cancel)
         btn_confirm = view.findViewById(R.id.btn_book_confirm)
         return view

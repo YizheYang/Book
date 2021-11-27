@@ -55,8 +55,8 @@ class MainActivity : BaseActivity() {
         adapter = SeatAdapter(viewModel.getSeatListLD().value!!)
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = adapter
-        cb_floor = findViewById(R.id.cb_floor)
-        cb_area = findViewById(R.id.cb_area)
+        cb_floor = findViewById(R.id.cbb_floor)
+        cb_area = findViewById(R.id.cbb_area)
         tv_title = findViewById(R.id.tv_title)
         fab = findViewById(R.id.fab)
     }

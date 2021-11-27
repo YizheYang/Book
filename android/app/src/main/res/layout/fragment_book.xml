@@ -45,7 +45,7 @@
                 app:layout_constraintVertical_bias="0.2" />
 
             <com.github.book.widget.ComboBox
-                android:id="@+id/cb_book_choose"
+                android:id="@+id/cbb_book_choose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
