@@ -36,6 +36,8 @@ class SettingActivity : BaseActivity() {
 
     override fun getLayoutId() = R.layout.activity_setting
 
+    override fun doubleReturn(): Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         btn_pwd = findViewById(R.id.btn_setting_pwd)

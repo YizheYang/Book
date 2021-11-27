@@ -29,6 +29,8 @@ class LoginActivity : BaseActivity() {
 
     override fun getLayoutId() = R.layout.activity_login
 
+    override fun doubleReturn(): Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         et_username = findViewById(R.id.et_username)
