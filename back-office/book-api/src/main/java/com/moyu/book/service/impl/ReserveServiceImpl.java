@@ -3,7 +3,6 @@ package com.moyu.book.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.moyu.book.dao.mapper.LibraryMapper;
 import com.moyu.book.dao.mapper.StatusMapper;
-import com.moyu.book.dao.mapper.UserMapper;
 import com.moyu.book.dao.pojo.Status;
 import com.moyu.book.service.ReserveService;
 import com.moyu.book.vo.ErrorCode;
@@ -54,10 +53,9 @@ public class ReserveServiceImpl implements ReserveService {
         queryWrapper.eq(Status::getUserId,status.getUserId());
         List<Status> statusList = statusMapper.selectList(queryWrapper);
         for (Status status1 : statusList){
-            if (Objects.equals(status1.getSdate(), status.getSdate()))
+            if (Objects.equals(status1.getSdate(), status.getSdate()) && status1.getStatus())
                 return Result.fail(ErrorCode.FAIL_RESERVE.getCode(), ErrorCode.FAIL_RESERVE.getMsg()+"同一时间重复预定多个座位");
         }
-
         int insert = statusMapper.insert(status);
         if (insert == 0)
             return Result.fail(ErrorCode.FAIL_RESERVE.getCode(), ErrorCode.FAIL_RESERVE.getMsg());
