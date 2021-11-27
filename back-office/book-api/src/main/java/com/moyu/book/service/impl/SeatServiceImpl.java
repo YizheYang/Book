@@ -42,6 +42,7 @@ public class SeatServiceImpl implements SeatService {
              */
             LambdaQueryWrapper<Status> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Status::getStatusId,library.getStatusId());
+            queryWrapper.eq(Status::getStatus,true);
             List<Status> statusList = statusMapper.selectList(queryWrapper);
             seatVo.setStatusList(statusList);
             seatVoList.add(seatVo);

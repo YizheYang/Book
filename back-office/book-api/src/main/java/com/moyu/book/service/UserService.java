@@ -9,4 +9,6 @@ import org.springframework.stereotype.Service;
 
 public interface UserService {
     Result findAll(LoginParam loginParam);
+
+    Result exchangePassword(LoginParam loginParam);
 }
