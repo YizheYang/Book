@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_item_no"
+            android:id="@+id/tv_item_seat_no"
             android:layout_width="48sp"
             android:layout_height="48sp"
             android:layout_gravity="center"

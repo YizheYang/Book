@@ -38,11 +38,22 @@ public class UserServiceImpl implements UserService {
         return Result.success(user);
     }
 
+    @Override
+    public Result exchangePassword(LoginParam loginParam) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getAccount,loginParam.getAccount());
+        User user = new User();
+        user.setPassword(loginParam.getPassword());
+        int update = userMapper.update(user, queryWrapper);
+        if (update == 0) return Result.fail(90005,"找不到用户");
+        return Result.success(loginParam.getAccount()+ "修改成功");
+    }
+
     private User findUser(String account, String password) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getAccount,account);
         queryWrapper.eq(User::getPassword,password);
-        queryWrapper.select(User::getAccount,User::getName,User::getTimeId);
+        queryWrapper.select(User::getId,User::getAccount,User::getName,User::getTimeId);
         queryWrapper.last("limit 1");
         return userMapper.selectOne(queryWrapper);
     }

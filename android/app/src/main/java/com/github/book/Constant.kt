@@ -8,5 +8,11 @@ package com.github.book
  * update none
  **/
 object Constant {
-    // ip = 47.106.89.121
+    private const val ip = "http://47.106.89.121:8080"
+    const val login = "$ip/login"
+    const val search = "$ip/search"
+    const val reserve = "$ip/reserve"
+    const val searchWithUser = "$search/order"
+    const val unsubscribe = "$ip/unsubscribe"
+    const val expassword = "$ip/expassword"
 }

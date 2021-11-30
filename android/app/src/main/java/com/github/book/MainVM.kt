@@ -1,9 +1,15 @@
 package com.github.book
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.book.entity.SearchResponse
 import com.github.book.entity.SeatBean
-import org.jetbrains.annotations.TestOnly
+import com.github.book.entity.User
+import com.github.book.network.RequestByOkhttp
+import com.google.gson.Gson
+import okhttp3.Call
+import okhttp3.Response
 
 /**
  * description none
@@ -17,6 +23,9 @@ class MainVM : ViewModel() {
 
     var tempFloor = MutableLiveData<String>()
     var tempArea = MutableLiveData<String>()
+    lateinit var user: User
+
+    private var mOnRequest: OnRequest? = null
 
     init {
         loadData()
@@ -26,19 +35,31 @@ class MainVM : ViewModel() {
         return seatListLD
     }
 
-    fun setSeatList(list: MutableList<SeatBean>) {
+    private fun setSeatList(list: MutableList<SeatBean>) {
         seatListLD.value = list
     }
 
-    @TestOnly
-    private fun loadData() {
-        val list = mutableListOf(
-            SeatBean("1", "a", 1, true),
-            SeatBean("1", "a", 2, false),
-            SeatBean("1", "a", 3, false),
-            SeatBean("1", "b", 1, false),
-            SeatBean("2", "b", 4, false)
-        )
+    fun loadData() {
+        val list = mutableListOf<SeatBean>()
+        RequestByOkhttp().get(Constant.search, object : RequestByOkhttp.MyCallBack(null) {
+            override fun onResponse(call: Call, response: Response) {
+                val myResponse = Gson().fromJson(response.body()?.string(), SearchResponse::class.java)
+                for (d in myResponse.data) {
+                    d.apply {
+                        seatListLD.value?.add(SeatBean(id, floor, area, number, statusList))
+                    }
+                }
+                mOnRequest?.onFinish()
+            }
+        })
         setSeatList(list)
+    }
+
+    interface OnRequest {
+        fun onFinish()
+    }
+
+    fun setOnRequest(onRequest: OnRequest) {
+        this.mOnRequest = onRequest
     }
 }
