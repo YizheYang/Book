@@ -2,9 +2,12 @@ package com.github.book.ui
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.github.book.Constant
 import com.github.book.R
@@ -13,10 +16,12 @@ import com.github.book.database.AccountDatabase
 import com.github.book.entity.AccountBean
 import com.github.book.entity.LoginRequest
 import com.github.book.entity.LoginResponse
+import com.github.book.entity.RegisterRequest
 import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
+import java.io.IOException
 import java.util.*
 
 /**
@@ -49,6 +54,10 @@ class LoginActivity : BaseActivity() {
 
     override fun getLayoutId() = R.layout.activity_login
 
+    override fun initProgressBar() = R.id.pgb_login
+
+    override fun initBackground() = R.id.view_login_background
+
     override fun doubleReturn(): Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +72,10 @@ class LoginActivity : BaseActivity() {
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
+        setAutoFillHint()
         database = Room.databaseBuilder(this, AccountDatabase::class.java, "book.db")
             .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
@@ -82,13 +93,17 @@ class LoginActivity : BaseActivity() {
 
     private fun setListener() {
         btn_login.setOnClickListener {
+            loading()
             val username = et_account.text.toString()
             val password = et_password.text.toString()
             request(username, password)
         }
 
         btn_signin.setOnClickListener {
-            Toast.makeText(this, "sign in", Toast.LENGTH_SHORT).show()
+            loading()
+            val account = et_account.text.toString()
+            val password = et_password.text.toString()
+            register(account, "newUser", password)
         }
 
         ib_list.setOnClickListener {
@@ -147,7 +162,13 @@ class LoginActivity : BaseActivity() {
     private fun request(username: String, password: String) {
         val json = Gson().toJson(LoginRequest(username, password))
         RequestByOkhttp().post(Constant.login, json, object : RequestByOkhttp.MyCallBack(this) {
+            override fun onFailure(call: Call, e: IOException) {
+                stopLoading()
+                super.onFailure(call, e)
+            }
+
             override fun onResponse(call: Call, response: Response) {
+                stopLoading()
                 val myResponse = Gson().fromJson(response.body()?.string(), LoginResponse::class.java)
                 runOnUiThread {
                     if (myResponse?.success == true) {
@@ -184,6 +205,48 @@ class LoginActivity : BaseActivity() {
                 }
             }
         })
+    }
+
+    private fun register(account: String, username: String, password: String) {
+        val json = Gson().toJson(RegisterRequest(account, username, password))
+        RequestByOkhttp().post(Constant.register, json, object : RequestByOkhttp.MyCallBack(this) {
+            override fun onFailure(call: Call, e: IOException) {
+                stopLoading()
+                super.onFailure(call, e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                stopLoading()
+                val myResponse = Gson().fromJson(response.body()?.string(), LoginResponse::class.java)
+                runOnUiThread {
+                    if (myResponse?.success == true) {
+                        if (cb_account.isChecked) {
+                            val accountBean = AccountBean(
+                                et_account.text.toString(),
+                                if (cb_password.isChecked) {
+                                    et_password.text.toString()
+                                } else {
+                                    null
+                                },
+                                System.currentTimeMillis()
+                            )
+                            database.getAccountDao().insertAccount(accountBean)
+                        }
+                        MainActivity.startActivity(this@LoginActivity, myResponse.data)
+                        Toast.makeText(this@LoginActivity, "注册成功", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, "注册失败，账号已经存在", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setAutoFillHint() {
+        et_account.setAutofillHints(View.AUTOFILL_HINT_USERNAME)
+        et_password.setAutofillHints(View.AUTOFILL_HINT_PASSWORD)
     }
 
 }

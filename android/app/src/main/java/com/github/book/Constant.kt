@@ -15,4 +15,5 @@ object Constant {
     const val searchWithUser = "$search/order"
     const val unsubscribe = "$ip/unsubscribe"
     const val expassword = "$ip/expassword"
+    const val register = "$ip/register"
 }

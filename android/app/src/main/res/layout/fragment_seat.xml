@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="座位编号："
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_seat_status"
                 app:layout_constraintStart_toStartOf="@+id/tv_seat_status" />
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="状态："
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_seat_sDate"
                 app:layout_constraintStart_toStartOf="@+id/tv_seat_sDate" />
@@ -59,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="开始时间："
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_seat_ddate"
                 app:layout_constraintStart_toStartOf="@+id/tv_seat_ddate" />
@@ -68,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="结束时间："
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_seat_cancel"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -27,6 +27,9 @@ class SettingActivity : BaseActivity() {
     private lateinit var orderFragment: OrderFragment
 
     private lateinit var btn_logout: Button
+    private lateinit var btn_username: Button
+
+    private lateinit var usernameFragment: UsernameFragment
 
     companion object {
         @JvmStatic
@@ -46,6 +49,7 @@ class SettingActivity : BaseActivity() {
         btn_pwd = findViewById(R.id.btn_setting_pwd)
         btn_list = findViewById(R.id.btn_setting_list)
         btn_logout = findViewById(R.id.btn_setting_logout)
+        btn_username = findViewById(R.id.btn_setting_username)
     }
 
     override fun onStart() {
@@ -70,6 +74,12 @@ class SettingActivity : BaseActivity() {
         btn_logout.setOnClickListener {
             setResult(RESULT_OK)
             finish()
+        }
+
+        btn_username.setOnClickListener {
+            usernameFragment = UsernameFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container_setting, usernameFragment)
+                .commit()
         }
     }
 }

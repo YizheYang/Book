@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsetsController
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -20,16 +21,47 @@ abstract class BaseActivity : AppCompatActivity() {
     private var firstBackPress = 0L
     private val backPressTime = 1000L
 
+    private lateinit var progressBar: ProgressBar
+    private lateinit var background: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
+        try {
+            progressBar = findViewById(initProgressBar())
+            background = findViewById(initBackground())
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         autoAdjustStatusBarText()
     }
 
     @LayoutRes
     abstract fun getLayoutId(): Int
 
+    open fun initProgressBar(): Int {
+        return 0
+    }
+
+    open fun initBackground(): Int {
+        return 0
+    }
+
     abstract fun doubleReturn(): Boolean
+
+    fun loading() {
+        runOnUiThread {
+            progressBar.visibility = View.VISIBLE
+            background.visibility = View.VISIBLE
+        }
+    }
+
+    fun stopLoading() {
+        runOnUiThread {
+            progressBar.visibility = View.GONE
+            background.visibility = View.GONE
+        }
+    }
 
     private fun autoAdjustStatusBarText() {
         //手机为浅色模主题时，状态栏字体颜色设为黑色，由于状态栏字体颜色默认为白色，所以深色主题不需要适配

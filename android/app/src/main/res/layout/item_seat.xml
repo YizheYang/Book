@@ -19,11 +19,12 @@
 
         <TextView
             android:id="@+id/tv_item_seat_no"
-            android:layout_width="48sp"
-            android:layout_height="48sp"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="2" />
+            android:textSize="20sp"
+            android:textColor="@color/black" />
     </androidx.cardview.widget.CardView>
 
 
