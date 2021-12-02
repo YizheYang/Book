@@ -22,6 +22,7 @@ import com.github.book.widget.ComboBox
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -83,6 +84,7 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
 
         btn_confirm.setOnClickListener {
             if (time in 8..22) {
+                loading()
                 val json = Gson().toJson(
                     BookRequest(
                         seat.id,
@@ -93,6 +95,7 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
                 )
                 RequestByOkhttp().post(Constant.reserve, json, object : RequestByOkhttp.MyCallBack(requireContext()) {
                     override fun onResponse(call: Call, response: Response) {
+                        super.onResponse(call, response)
                         val myResponse = Gson().fromJson(response.body()?.string(), BookResponse::class.java)
                         if (myResponse.success) {
                             handler.sendEmptyMessage(1)

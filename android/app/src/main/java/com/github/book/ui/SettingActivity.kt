@@ -42,6 +42,10 @@ class SettingActivity : BaseActivity() {
 
     override fun getLayoutId() = R.layout.activity_setting
 
+    override fun initProgressBar() = R.id.pgb_setting
+
+    override fun initBackground() = R.id.view_setting_background
+
     override fun doubleReturn(): Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,5 +85,12 @@ class SettingActivity : BaseActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container_setting, usernameFragment)
                 .commit()
         }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent()
+        intent.putExtra("user", viewModel.user)
+        setResult(RESULT_CANCELED, intent)
+        finish()
     }
 }

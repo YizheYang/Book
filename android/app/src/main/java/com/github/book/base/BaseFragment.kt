@@ -26,4 +26,12 @@ abstract class BaseFragment : Fragment() {
     }
 
     abstract fun initView(view: View, savedInstanceState: Bundle?)
+
+    fun loading() {
+        (requireActivity() as BaseActivity).loading()
+    }
+
+    fun stopLoading() {
+        (requireActivity() as BaseActivity).stopLoading()
+    }
 }

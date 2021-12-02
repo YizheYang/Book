@@ -16,4 +16,5 @@ object Constant {
     const val unsubscribe = "$ip/unsubscribe"
     const val expassword = "$ip/expassword"
     const val register = "$ip/register"
+    const val exusername = "$ip/exusername"
 }

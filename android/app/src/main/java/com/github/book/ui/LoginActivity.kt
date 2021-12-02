@@ -162,13 +162,8 @@ class LoginActivity : BaseActivity() {
     private fun request(username: String, password: String) {
         val json = Gson().toJson(LoginRequest(username, password))
         RequestByOkhttp().post(Constant.login, json, object : RequestByOkhttp.MyCallBack(this) {
-            override fun onFailure(call: Call, e: IOException) {
-                stopLoading()
-                super.onFailure(call, e)
-            }
-
             override fun onResponse(call: Call, response: Response) {
-                stopLoading()
+                super.onResponse(call, response)
                 val myResponse = Gson().fromJson(response.body()?.string(), LoginResponse::class.java)
                 runOnUiThread {
                     if (myResponse?.success == true) {
@@ -210,13 +205,8 @@ class LoginActivity : BaseActivity() {
     private fun register(account: String, username: String, password: String) {
         val json = Gson().toJson(RegisterRequest(account, username, password))
         RequestByOkhttp().post(Constant.register, json, object : RequestByOkhttp.MyCallBack(this) {
-            override fun onFailure(call: Call, e: IOException) {
-                stopLoading()
-                super.onFailure(call, e)
-            }
-
             override fun onResponse(call: Call, response: Response) {
-                stopLoading()
+                super.onResponse(call, response)
                 val myResponse = Gson().fromJson(response.body()?.string(), LoginResponse::class.java)
                 runOnUiThread {
                     if (myResponse?.success == true) {

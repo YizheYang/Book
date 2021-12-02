@@ -59,12 +59,13 @@ class MainActivity : BaseActivity() {
         cb_area = findViewById(R.id.cbb_area)
         tv_title = findViewById(R.id.tv_title)
         fab = findViewById(R.id.fab)
+
+        viewModel.user = intent.extras?.get("user") as User
+        tv_title.text = "欢迎！${viewModel.user.name}"
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.user = intent.extras?.get("user") as User
-        tv_title.text = "欢迎！${viewModel.user.name}"
         setListener()
         setObserver()
     }
@@ -73,9 +74,15 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             1 -> {
-                if (resultCode == RESULT_OK) {
-                    LoginActivity.startActivity(this)
-                    finish()
+                when (resultCode) {
+                    RESULT_OK -> {
+                        LoginActivity.startActivity(this)
+                        finish()
+                    }
+                    RESULT_CANCELED -> {
+                        viewModel.user = data?.extras?.get("user") as User
+                        tv_title.text = "欢迎！${viewModel.user.name}"
+                    }
                 }
             }
         }

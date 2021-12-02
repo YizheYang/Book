@@ -1,7 +1,11 @@
 package com.github.book.network
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.widget.Toast
+import com.github.book.base.BaseActivity
 import okhttp3.*
 import java.io.IOException
 import kotlin.concurrent.thread
@@ -38,13 +42,31 @@ class RequestByOkhttp {
     }
 
     open class MyCallBack(private val context: Context?) : Callback {
+        private val handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                when (msg.what) {
+                    1 -> {
+                        try {
+                            context?.let { (it as BaseActivity).stopLoading() }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        }
+
         override fun onFailure(call: Call, e: IOException) {
             context?.let {
+                handler.sendEmptyMessage(1)
                 Toast.makeText(it, "请求失败，请检查网络或者请求地址", Toast.LENGTH_SHORT).show()
             }
         }
 
-        override fun onResponse(call: Call, response: Response) {}
-
+        override fun onResponse(call: Call, response: Response) {
+            context?.let {
+                handler.sendEmptyMessage(1)
+            }
+        }
     }
 }

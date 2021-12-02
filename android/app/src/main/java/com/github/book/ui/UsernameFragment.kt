@@ -1,6 +1,17 @@
 package com.github.book.ui
 
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.widget.Toast
+import com.github.book.Constant
+import com.github.book.entity.BookResponse
+import com.github.book.entity.ChangeUsernameRequest
+import com.github.book.entity.User
+import com.github.book.network.RequestByOkhttp
+import com.google.gson.Gson
+import okhttp3.Call
+import okhttp3.Response
 
 /**
  * description none
@@ -12,10 +23,38 @@ import android.widget.Toast
 class UsernameFragment : ChangeFragment() {
     override fun setHint() = "新用户名"
 
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when (msg.what) {
+                1 -> {
+                    Toast.makeText(requireContext(), "用户名修改成功", Toast.LENGTH_SHORT).show()
+                    viewModel.apply {
+                        user = User(user.id, user.account, et_new.text.toString(), user.password, user.timeId)
+                    }
+                }
+                2 -> Toast.makeText(requireContext(), "用户名修改失败", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun setListener() {
         super.setListener()
         btn_confirm.setOnClickListener {
-            Toast.makeText(requireContext(), "confirm", Toast.LENGTH_SHORT).show()
+            loading()
+            val json = Gson().toJson(ChangeUsernameRequest(viewModel.user.account, et_new.text.toString()))
+            RequestByOkhttp().post(Constant.exusername, json, object : RequestByOkhttp.MyCallBack(requireContext()) {
+                override fun onResponse(call: Call, response: Response) {
+                    super.onResponse(call, response)
+                    val myResponse = Gson().fromJson(response.body()?.string(), BookResponse::class.java)
+                    if (myResponse.success) {
+                        handler.sendEmptyMessage(1)
+                    } else {
+                        handler.sendEmptyMessage(2)
+                    }
+                    remove()
+                }
+            })
         }
     }
 }

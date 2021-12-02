@@ -22,6 +22,7 @@ import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -75,12 +76,14 @@ class OrderFragment : BaseFragment() {
                     .setMessage("楼层：${seat.floor}\n区域：${seat.area}\n座位号：${seat.no}\n开始时间：${seat.sDate}\n结束时间：${seat.dDate}\n是否退订该座位")
                     .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
                     .setPositiveButton("确认") { dialog, which ->
+                        loading()
                         val json = Gson().toJson(OrderRequest(seat.id, viewModel.user.id))
                         RequestByOkhttp().post(
                             Constant.unsubscribe,
                             json,
                             object : RequestByOkhttp.MyCallBack(requireContext()) {
                                 override fun onResponse(call: Call, response: Response) {
+                                    super.onResponse(call, response)
                                     val myResponse =
                                         Gson().fromJson(response.body()?.string(), BookResponse::class.java)
                                     handler.sendEmptyMessage(
@@ -105,10 +108,12 @@ class OrderFragment : BaseFragment() {
     }
 
     private fun refreshOrder() {
+        loading()
         RequestByOkhttp().get(
             "${Constant.searchWithUser}/${viewModel.user.id}",
             object : RequestByOkhttp.MyCallBack(requireContext()) {
                 override fun onResponse(call: Call, response: Response) {
+                    super.onResponse(call, response)
                     val myResponse = Gson().fromJson(response.body()?.string(), OrderResponse::class.java)
                     if (myResponse.success && myResponse.data.isNotEmpty()) {
                         orderList.clear()

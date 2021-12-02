@@ -13,6 +13,6 @@ data class User(
     val id: String,
     val account: String,
     val name: String,
-    val password: String,
+    val password: String?,
     val timeId: String
 ) : Serializable

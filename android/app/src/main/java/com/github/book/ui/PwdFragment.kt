@@ -24,10 +24,8 @@ class PwdFragment : ChangeFragment() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             when (msg.what) {
-                1 -> {
-                    Toast.makeText(requireContext(), "密码修改成功", Toast.LENGTH_SHORT).show()
-                    remove()
-                }
+                1 -> Toast.makeText(requireContext(), "密码修改成功", Toast.LENGTH_SHORT).show()
+                2 -> Toast.makeText(requireContext(), "密码修改失败，请重试", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -37,13 +35,18 @@ class PwdFragment : ChangeFragment() {
     override fun setListener() {
         super.setListener()
         btn_confirm.setOnClickListener {
+            loading()
             val json = Gson().toJson(LoginRequest(viewModel.user.account, et_new.text.toString()))
             RequestByOkhttp().post(Constant.expassword, json, object : RequestByOkhttp.MyCallBack(requireContext()) {
                 override fun onResponse(call: Call, response: Response) {
+                    super.onResponse(call, response)
                     val myResponse = Gson().fromJson(response.body()?.string(), PwdResponse::class.java)
                     if (myResponse.success) {
                         handler.sendEmptyMessage(1)
+                    } else {
+                        handler.sendEmptyMessage(2)
                     }
+                    remove()
                 }
             })
         }
