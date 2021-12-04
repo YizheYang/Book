@@ -1,15 +1,20 @@
 package com.github.book.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.base.BaseActivity
 import com.github.book.entity.User
+import java.io.File
 
 /**
  * description none
@@ -21,14 +26,12 @@ import com.github.book.entity.User
 class SettingActivity : BaseActivity() {
     private lateinit var btn_pwd: Button
     private lateinit var btn_list: Button
-    private lateinit var viewModel: MainVM
-
-    private lateinit var pwdFragment: PwdFragment
-    private lateinit var orderFragment: OrderFragment
-
     private lateinit var btn_logout: Button
     private lateinit var btn_username: Button
-
+    private lateinit var btn_crash: Button
+    private lateinit var viewModel: MainVM
+    private lateinit var pwdFragment: PwdFragment
+    private lateinit var orderFragment: OrderFragment
     private lateinit var usernameFragment: UsernameFragment
 
     companion object {
@@ -54,6 +57,7 @@ class SettingActivity : BaseActivity() {
         btn_list = findViewById(R.id.btn_setting_list)
         btn_logout = findViewById(R.id.btn_setting_logout)
         btn_username = findViewById(R.id.btn_setting_username)
+        btn_crash = findViewById(R.id.btn_setting_crashDir)
     }
 
     override fun onStart() {
@@ -76,7 +80,7 @@ class SettingActivity : BaseActivity() {
         }
 
         btn_logout.setOnClickListener {
-            setResult(RESULT_OK)
+            setResult(RESULT_LOGOUT)
             finish()
         }
 
@@ -85,12 +89,31 @@ class SettingActivity : BaseActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container_setting, usernameFragment)
                 .commit()
         }
+
+        btn_crash.setOnClickListener {
+            val path = (ContextCompat.getExternalFilesDirs(this.applicationContext, null)[0].absolutePath
+                    + "/crashLog/")
+            val dir = File(path)
+            if (!dir.exists()) {
+                dir.mkdirs()
+            }
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.setDataAndType(Uri.fromFile(dir), "text/plain")
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                e.printStackTrace()
+            }
+            Toast.makeText(this, "路径是：$path", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onBackPressed() {
         val intent = Intent()
         intent.putExtra("user", viewModel.user)
-        setResult(RESULT_CANCELED, intent)
+        setResult(RESULT_CHANGEUSERNAME, intent)
         finish()
     }
 }

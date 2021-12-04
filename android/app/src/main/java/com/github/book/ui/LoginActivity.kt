@@ -21,7 +21,6 @@ import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
-import java.io.IOException
 import java.util.*
 
 /**
@@ -70,6 +69,10 @@ class LoginActivity : BaseActivity() {
         cb_password = findViewById(R.id.cb_rememberPassword)
         ib_list = findViewById(R.id.ib_accountList)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0) {
+            finish()
+            return
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

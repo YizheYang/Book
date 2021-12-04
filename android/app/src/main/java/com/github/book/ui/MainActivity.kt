@@ -75,11 +75,11 @@ class MainActivity : BaseActivity() {
         when (requestCode) {
             1 -> {
                 when (resultCode) {
-                    RESULT_OK -> {
+                    RESULT_LOGOUT -> {
                         LoginActivity.startActivity(this)
                         finish()
                     }
-                    RESULT_CANCELED -> {
+                    RESULT_CHANGEUSERNAME -> {
                         viewModel.user = data?.extras?.get("user") as User
                         tv_title.text = "欢迎！${viewModel.user.name}"
                     }

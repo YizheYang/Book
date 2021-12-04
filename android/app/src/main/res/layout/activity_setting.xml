@@ -66,6 +66,14 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="退出登录" />
+
+            <Button
+                android:id="@+id/btn_setting_crashDir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="打开崩溃记录文件夹" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
