@@ -52,14 +52,21 @@ class RequestByOkhttp {
                             e.printStackTrace()
                         }
                     }
+                    2 -> {
+                        try {
+                            Toast.makeText(context, "请求失败，请检查网络或者请求地址", Toast.LENGTH_SHORT).show()
+                            context?.let { (it as BaseActivity).stopLoading() }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
                 }
             }
         }
 
         override fun onFailure(call: Call, e: IOException) {
             context?.let {
-                handler.sendEmptyMessage(1)
-                Toast.makeText(it, "请求失败，请检查网络或者请求地址", Toast.LENGTH_SHORT).show()
+                handler.sendEmptyMessage(2)
             }
         }
 

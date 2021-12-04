@@ -44,7 +44,11 @@ class MainActivity : BaseActivity() {
 
     override fun getLayoutId() = R.layout.activity_main
 
-    override fun doubleReturn(): Boolean = true
+    override fun doubleReturn() = true
+
+    override fun initProgressBar() = R.id.pgb_main
+
+    override fun initBackground() = R.id.view_main_background
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -183,6 +187,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun refreshList() {
+        viewModel.loadData()
         viewModel.getSeatListLD().value
             ?.filter { it.floor.toString() == viewModel.tempFloor.value && it.area == viewModel.tempArea.value }
             ?.let {

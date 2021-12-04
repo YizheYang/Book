@@ -12,4 +12,24 @@
     <color name="gray">#40555555</color>
     <color name="trans_black">#40000000</color>
 
+    <color name="peerAvatarRedTop">#ff885e</color>
+    <color name="peerAvatarRedBottom">#ff516a</color>
+
+    <color name="peerAvatarOrangeTop">#ffcd6a</color>
+    <color name="peerAvatarOrangeBottom">#ffa85c</color>
+
+    <color name="peerAvatarVioletTop">#82b1ff</color>
+    <color name="peerAvatarVioletBottom">#665fff</color>
+
+    <color name="peerAvatarGreenTop">#a0de7e</color>
+    <color name="peerAvatarGreenBottom">#54cb68</color>
+
+    <color name="peerAvatarCyanTop">#53edd6</color>
+    <color name="peerAvatarCyanBottom">#28c9b7</color>
+
+    <color name="peerAvatarBlueTop">#72d5fd</color>
+    <color name="peerAvatarBlueBottom">#2a9ef1</color>
+
+    <color name="peerAvatarPinkTop">#e0a2f3</color>
+    <color name="peerAvatarPinkBottom">#d669ed</color>
 </resources>

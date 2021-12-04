@@ -3,6 +3,7 @@ package com.github.book.base
 import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
@@ -49,7 +50,10 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkAndApplyPermissions()
-        Thread.setDefaultUncaughtExceptionHandler(MyUncaughtExceptionHandler(this))
+        // 判断是不是release版本
+        if (applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE == 0) {
+            Thread.setDefaultUncaughtExceptionHandler(MyUncaughtExceptionHandler(this))
+        }
         setContentView(getLayoutId())
         autoAdjustStatusBarText()
         val builder = VmPolicy.Builder()
@@ -60,7 +64,7 @@ abstract class BaseActivity : AppCompatActivity() {
         try {
             progressBar = findViewById(initProgressBar())
             background = findViewById(initBackground())
-        } catch (e: NullPointerException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

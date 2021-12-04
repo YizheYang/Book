@@ -22,7 +22,6 @@ import com.github.book.widget.ComboBox
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -67,7 +66,11 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
         date = SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).toLong()
-        title.text = "预订的范围是${date + 1L}"
+        title.text = "预订的范围是${
+            (date + 1L).toString().let {
+                it.substring(0, 4) + "." + it.substring(4, 6) + "." + it.substring(6, 8)
+            }
+        }"
         comboBox.setList(getFreeTime().map { it.toString() })
         comboBox.setItem("")
         comboBox.setDescription("时")

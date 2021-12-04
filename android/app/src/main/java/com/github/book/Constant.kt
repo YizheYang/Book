@@ -17,4 +17,14 @@ object Constant {
     const val expassword = "$ip/expassword"
     const val register = "$ip/register"
     const val exusername = "$ip/exusername"
+
+    val colorList = listOf(
+        R.color.peerAvatarRedTop, R.color.peerAvatarRedBottom,
+        R.color.peerAvatarOrangeTop, R.color.peerAvatarOrangeBottom,
+        R.color.peerAvatarVioletTop, R.color.peerAvatarVioletBottom,
+        R.color.peerAvatarGreenTop, R.color.peerAvatarGreenBottom,
+        R.color.peerAvatarCyanTop, R.color.peerAvatarCyanBottom,
+        R.color.peerAvatarBlueTop, R.color.peerAvatarBlueBottom,
+        R.color.peerAvatarPinkTop, R.color.peerAvatarPinkBottom
+    )
 }

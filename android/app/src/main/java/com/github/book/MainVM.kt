@@ -1,6 +1,5 @@
 package com.github.book
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.book.entity.SearchResponse
@@ -41,17 +40,19 @@ class MainVM : ViewModel() {
 
     fun loadData() {
         val list = mutableListOf<SeatBean>()
-        RequestByOkhttp().get(Constant.search, object : RequestByOkhttp.MyCallBack(null) {
-            override fun onResponse(call: Call, response: Response) {
-                val myResponse = Gson().fromJson(response.body()?.string(), SearchResponse::class.java)
-                for (d in myResponse.data) {
-                    d.apply {
-                        seatListLD.value?.add(SeatBean(id, floor, area, number, statusList))
+        RequestByOkhttp().get(
+            "${Constant.search}",
+            object : RequestByOkhttp.MyCallBack(null) {
+                override fun onResponse(call: Call, response: Response) {
+                    val myResponse = Gson().fromJson(response.body()?.string(), SearchResponse::class.java)
+                    for (d in myResponse.data) {
+                        d.apply {
+                            seatListLD.value?.add(SeatBean(id, floor, area, number, statusList))
+                        }
                     }
+                    mOnRequest?.onFinish()
                 }
-                mOnRequest?.onFinish()
-            }
-        })
+            })
         setSeatList(list)
     }
 

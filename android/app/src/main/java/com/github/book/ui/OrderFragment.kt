@@ -61,7 +61,7 @@ class OrderFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
-        adapter = OrderAdapter(orderList)
+        adapter = OrderAdapter(requireContext(), orderList)
         recyclerView.adapter = adapter
         refreshOrder()
         setListener()

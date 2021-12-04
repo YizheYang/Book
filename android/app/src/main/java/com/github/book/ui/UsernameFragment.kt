@@ -28,10 +28,10 @@ class UsernameFragment : ChangeFragment() {
             super.handleMessage(msg)
             when (msg.what) {
                 1 -> {
-                    Toast.makeText(requireContext(), "用户名修改成功", Toast.LENGTH_SHORT).show()
                     viewModel.apply {
                         user = User(user.id, user.account, et_new.text.toString(), user.password, user.timeId)
                     }
+                    Toast.makeText(requireContext(), "用户名修改成功", Toast.LENGTH_SHORT).show()
                 }
                 2 -> Toast.makeText(requireContext(), "用户名修改失败", Toast.LENGTH_SHORT).show()
             }

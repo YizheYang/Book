@@ -1,12 +1,18 @@
 package com.github.book.adapter
 
+import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.github.book.Constant
 import com.github.book.R
 import com.github.book.entity.OrderBean
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 /**
  * description none
@@ -15,7 +21,8 @@ import com.github.book.entity.OrderBean
  * version 1.0
  * update none
  **/
-class OrderAdapter(private var list: MutableList<OrderBean>) : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
+class OrderAdapter(private val context: Context, private var list: MutableList<OrderBean>) :
+    RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
     private var mOnChildrenClickListener: OnChildrenClickListener? = null
 
@@ -36,6 +43,10 @@ class OrderAdapter(private var list: MutableList<OrderBean>) : RecyclerView.Adap
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         holder.no.text = (position + 1).toString()
         holder.time.text = "${list[position].sDate}——${list[position].dDate}"
+        val gd = holder.no.background as GradientDrawable
+        gd.setColor(ContextCompat.getColor(context, Constant.colorList.let {
+            it[Random.nextInt(it.indices)]
+        }))
     }
 
     override fun getItemCount() = list.size

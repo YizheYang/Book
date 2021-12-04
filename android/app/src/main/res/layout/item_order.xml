@@ -4,31 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_item_order_index"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@color/trans_black"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+    <com.github.book.widget.RadiusCardView
+        android:id="@+id/rcv_item_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:rcv_bottomLeftRadiu="20dp"
+        app:rcv_bottomRightRadiu="20dp"
+        app:rcv_topLeftRadiu="20dp"
+        app:rcv_topRightRadiu="20dp">
+
+        <TextView
+            android:id="@+id/tv_item_order_index"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@color/trans_black"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+    </com.github.book.widget.RadiusCardView>
+
 
     <TextView
         android:id="@+id/tv_item_order_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/rcv_item_order"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/tv_item_order_index"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/rcv_item_order"
+        app:layout_constraintTop_toTopOf="@id/rcv_item_order" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
