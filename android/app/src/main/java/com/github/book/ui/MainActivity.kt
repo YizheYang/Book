@@ -66,13 +66,13 @@ class MainActivity : BaseActivity() {
         fab = findViewById(R.id.fab)
 
         viewModel.user = intent.extras?.get("user") as User
+        setListener()
+        setObserver()// 放在onStart设置的话，会在切换别的AC然后切换回来的时候执行观察时间。
     }
 
     override fun onStart() {
         super.onStart()
         tv_title.text = "欢迎！${viewModel.user.name}"
-        setListener()
-        setObserver()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

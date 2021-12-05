@@ -29,6 +29,7 @@ class SettingActivity : BaseActivity() {
     private lateinit var orderFragment: OrderFragment
     private lateinit var usernameFragment: UsernameFragment
     lateinit var user: User
+    var changedUsername = false
 
     companion object {
         @JvmStatic
@@ -109,9 +110,13 @@ class SettingActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        val intent = Intent()
-        intent.putExtra("user", user)
-        setResult(RESULT_CHANGEUSERNAME, intent)
-        finish()
+        if (changedUsername) {
+            val intent = Intent()
+            intent.putExtra("user", user)
+            setResult(RESULT_CHANGEUSERNAME, intent)
+            finish()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

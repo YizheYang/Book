@@ -30,6 +30,7 @@ class UsernameFragment : ChangeFragment() {
                 1 -> {
                     (requireActivity() as SettingActivity).apply {
                         user = User(user.id, user.account, et_new.text.toString(), user.password, user.timeId)
+                        changedUsername = true
                     }
                     Toast.makeText(requireContext(), "用户名修改成功", Toast.LENGTH_SHORT).show()
                 }

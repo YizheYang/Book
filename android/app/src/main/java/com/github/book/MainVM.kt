@@ -1,5 +1,6 @@
 package com.github.book
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.book.entity.*
@@ -18,8 +19,8 @@ import okhttp3.Response
 class MainVM : ViewModel() {
     private val seatListLD = MutableLiveData<MutableList<SeatBean>>(mutableListOf())
     val floorList = mutableListOf<FloorBean>()
-    var tempFloor = MutableLiveData<Int>()
-    var tempArea = MutableLiveData<String>()
+    val tempFloor = MutableLiveData<Int>()
+    val tempArea = MutableLiveData<String>()
     lateinit var user: User
 
     private var mOnRequest: OnRequest? = null
@@ -33,7 +34,6 @@ class MainVM : ViewModel() {
     }
 
     fun loadData() {
-//        val list = mutableListOf<SeatBean>()
         RequestByOkhttp().get(Constant.searchArea, object : RequestByOkhttp.MyCallBack(null) {
             override fun onResponse(call: Call, response: Response) {
                 val myResponse = Gson().fromJson(response.body()?.string(), SearchFloorResponse::class.java)
@@ -61,7 +61,6 @@ class MainVM : ViewModel() {
                 }
             }
         })
-//        seatListLD.value = list
     }
 
     interface OnRequest {

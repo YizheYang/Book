@@ -45,8 +45,12 @@ class SeatFragment(private val seat: SeatBean) : BaseFragment() {
         id.text = "座位编号：${seat.no}"
         if (seat.isBook()) {
             status.text = "状态：无空位"
-            sDate.text = "开始时间：${seat.getBookedSDate()}"
-            dDate.text = "结束时间：${seat.getBookedDDate()}"
+            sDate.text = "开始时间：${
+                seat.getBookedSDate()//.let { it.substring(0, 4) + "." + it.substring(4, 6) + "." + it.substring(6, 8) }
+            }"
+            dDate.text = "结束时间：${
+                seat.getBookedDDate()//.let { it.substring(0, 4) + "." + it.substring(4, 6) + "." + it.substring(6, 8) }
+            }"
         } else {
             status.text = "状态：有空位"
         }
