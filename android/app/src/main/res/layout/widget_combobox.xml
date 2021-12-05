@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/gray"
+        android:background="@color/colorBgBlue"
         android:src="@drawable/ic_baseline_expand_more_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_comboBox_description"

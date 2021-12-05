@@ -9,6 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:alpha="0.9"
+        android:background="@mipmap/library1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +23,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:text="欢迎！"
-            android:textColor="@color/black"
+            android:textColor="@color/colorPrimary"
             android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

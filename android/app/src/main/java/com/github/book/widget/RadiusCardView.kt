@@ -28,13 +28,13 @@ class RadiusCardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, R.attr.materialCardViewStyle)
 
     init {
-        setRadius(0F)
+        radius = 0F
         val array: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.RadiusCardView)
         tlRadiu = array.getDimension(R.styleable.RadiusCardView_rcv_topLeftRadiu, 0f)
         trRadiu = array.getDimension(R.styleable.RadiusCardView_rcv_topRightRadiu, 0f)
         brRadiu = array.getDimension(R.styleable.RadiusCardView_rcv_bottomRightRadiu, 0f)
         blRadiu = array.getDimension(R.styleable.RadiusCardView_rcv_bottomLeftRadiu, 0f)
-        setBackground(ColorDrawable())
+        background = ColorDrawable()
     }
 
     override fun onDraw(canvas: Canvas) {

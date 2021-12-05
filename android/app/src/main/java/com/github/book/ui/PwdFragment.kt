@@ -36,7 +36,8 @@ class PwdFragment : ChangeFragment() {
         super.setListener()
         btn_confirm.setOnClickListener {
             loading()
-            val json = Gson().toJson(LoginRequest(viewModel.user.account, et_new.text.toString()))
+            val json =
+                Gson().toJson(LoginRequest((requireActivity() as SettingActivity).user.account, et_new.text.toString()))
             RequestByOkhttp().post(Constant.expassword, json, object : RequestByOkhttp.MyCallBack(requireContext()) {
                 override fun onResponse(call: Call, response: Response) {
                     super.onResponse(call, response)

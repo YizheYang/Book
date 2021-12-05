@@ -7,10 +7,8 @@ import android.os.Looper
 import android.os.Message
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.github.book.Constant
-import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.adapter.OrderAdapter
 import com.github.book.base.BaseFragment
@@ -22,7 +20,6 @@ import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,7 +31,6 @@ import java.util.*
  * update none
  **/
 class OrderFragment : BaseFragment() {
-    private lateinit var viewModel: MainVM
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: OrderAdapter
     private lateinit var background: View
@@ -60,7 +56,6 @@ class OrderFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
         adapter = OrderAdapter(requireContext(), orderList)
         recyclerView.adapter = adapter
         refreshOrder()
@@ -77,7 +72,7 @@ class OrderFragment : BaseFragment() {
                     .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
                     .setPositiveButton("确认") { dialog, which ->
                         loading()
-                        val json = Gson().toJson(OrderRequest(seat.id, viewModel.user.id))
+                        val json = Gson().toJson(OrderRequest(seat.id, (requireActivity() as SettingActivity).user.id))
                         RequestByOkhttp().post(
                             Constant.unsubscribe,
                             json,
@@ -110,7 +105,7 @@ class OrderFragment : BaseFragment() {
     private fun refreshOrder() {
         loading()
         RequestByOkhttp().get(
-            "${Constant.searchWithUser}/${viewModel.user.id}",
+            "${Constant.searchWithUser}/${(requireActivity() as SettingActivity).user.id}",
             object : RequestByOkhttp.MyCallBack(requireContext()) {
                 override fun onResponse(call: Call, response: Response) {
                     super.onResponse(call, response)

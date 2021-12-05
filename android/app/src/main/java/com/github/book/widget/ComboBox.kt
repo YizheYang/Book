@@ -41,7 +41,9 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
     fun setList(list: List<String>?) {
         list?.let {
             this.list = it
-            setItem(it[0])
+            if (tv_item.text == null || tv_item.text == "") {
+                setItem(it[0])
+            }
         }
     }
 

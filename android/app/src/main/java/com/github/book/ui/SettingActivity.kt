@@ -1,16 +1,12 @@
 package com.github.book.ui
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.base.BaseActivity
 import com.github.book.entity.User
@@ -29,10 +25,10 @@ class SettingActivity : BaseActivity() {
     private lateinit var btn_logout: Button
     private lateinit var btn_username: Button
     private lateinit var btn_crash: Button
-    private lateinit var viewModel: MainVM
     private lateinit var pwdFragment: PwdFragment
     private lateinit var orderFragment: OrderFragment
     private lateinit var usernameFragment: UsernameFragment
+    lateinit var user: User
 
     companion object {
         @JvmStatic
@@ -62,9 +58,7 @@ class SettingActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel = ViewModelProvider(this)[MainVM::class.java]
-        viewModel.user = intent.extras?.get("user") as User
-        viewModel.loadData()
+        user = intent.extras?.get("user") as User
         setListener()
     }
 
@@ -106,13 +100,17 @@ class SettingActivity : BaseActivity() {
             } catch (e: ActivityNotFoundException) {
                 e.printStackTrace()
             }
-            Toast.makeText(this, "路径是：$path", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "如果没到达指定路径请手动进入（大概率需要手动）", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "路径：$path", Toast.LENGTH_LONG).show()
+            (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
+                ClipData.newPlainText("text", path)
+            )
         }
     }
 
     override fun onBackPressed() {
         val intent = Intent()
-        intent.putExtra("user", viewModel.user)
+        intent.putExtra("user", user)
         setResult(RESULT_CHANGEUSERNAME, intent)
         finish()
     }

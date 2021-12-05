@@ -35,7 +35,7 @@ class SeatAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: SeatViewHolder, position: Int) {
         holder.no.text = list[position].no.toString()
         if (list[position].isBook()) {
-            holder.no.setBackgroundColor(Color.argb(127, 199, 84, 80))
+            holder.no.setBackgroundColor(Color.argb(255, 255, 81, 106))
         }
     }
 
@@ -49,7 +49,7 @@ class SeatAdapter(private var list: MutableList<SeatBean>) : RecyclerView.Adapte
         mOnChildrenClickListener = onChildrenClickListener
     }
 
-    fun setList(list: MutableList<SeatBean>) {
-        this.list = list
+    fun setList(list: List<SeatBean>) {
+        this.list = list as MutableList<SeatBean>
     }
 }

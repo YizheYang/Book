@@ -2,9 +2,7 @@ package com.github.book
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.github.book.entity.SearchResponse
-import com.github.book.entity.SeatBean
-import com.github.book.entity.User
+import com.github.book.entity.*
 import com.github.book.network.RequestByOkhttp
 import com.google.gson.Gson
 import okhttp3.Call
@@ -18,9 +16,9 @@ import okhttp3.Response
  * update none
  **/
 class MainVM : ViewModel() {
-    private val seatListLD = MutableLiveData<MutableList<SeatBean>>()
-
-    var tempFloor = MutableLiveData<String>()
+    private val seatListLD = MutableLiveData<MutableList<SeatBean>>(mutableListOf())
+    val floorList = mutableListOf<FloorBean>()
+    var tempFloor = MutableLiveData<Int>()
     var tempArea = MutableLiveData<String>()
     lateinit var user: User
 
@@ -34,26 +32,36 @@ class MainVM : ViewModel() {
         return seatListLD
     }
 
-    private fun setSeatList(list: MutableList<SeatBean>) {
-        seatListLD.value = list
-    }
-
     fun loadData() {
-        val list = mutableListOf<SeatBean>()
-        RequestByOkhttp().get(
-            "${Constant.search}",
-            object : RequestByOkhttp.MyCallBack(null) {
-                override fun onResponse(call: Call, response: Response) {
-                    val myResponse = Gson().fromJson(response.body()?.string(), SearchResponse::class.java)
+//        val list = mutableListOf<SeatBean>()
+        RequestByOkhttp().get(Constant.searchArea, object : RequestByOkhttp.MyCallBack(null) {
+            override fun onResponse(call: Call, response: Response) {
+                val myResponse = Gson().fromJson(response.body()?.string(), SearchFloorResponse::class.java)
+                if (myResponse.success) {
+                    floorList.clear()
                     for (d in myResponse.data) {
-                        d.apply {
-                            seatListLD.value?.add(SeatBean(id, floor, area, number, statusList))
-                        }
+                        floorList.add(d)
                     }
-                    mOnRequest?.onFinish()
+                    RequestByOkhttp().get(
+                        "${Constant.search}/?floor=${tempFloor.value ?: floorList.first().floor}&area=${tempArea.value ?: floorList.first().areaList.first()}",
+                        object : RequestByOkhttp.MyCallBack(null) {
+                            override fun onResponse(call: Call, response: Response) {
+                                val myResponse1 = Gson().fromJson(response.body()?.string(), SearchResponse::class.java)
+                                if (myResponse1.success) {
+                                    seatListLD.value?.clear()
+                                    for (d in myResponse1.data) {
+                                        d.apply {
+                                            seatListLD.value?.add(SeatBean(id, floor, area, number, statusList))
+                                        }
+                                    }
+                                    mOnRequest?.onFinish()
+                                }
+                            }
+                        })
                 }
-            })
-        setSeatList(list)
+            }
+        })
+//        seatListLD.value = list
     }
 
     interface OnRequest {

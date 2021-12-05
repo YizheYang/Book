@@ -5,8 +5,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
-import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.base.BaseFragment
 
@@ -23,7 +21,6 @@ abstract class ChangeFragment : BaseFragment() {
     lateinit var btn_confirm: Button
     lateinit var background: View
     lateinit var hint: TextView
-    lateinit var viewModel: MainVM
 
     override fun getLayoutId() = R.layout.fragment_change
 
@@ -36,7 +33,6 @@ abstract class ChangeFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
         hint.text = setHint()
         setListener()
     }

@@ -41,6 +41,7 @@ class MainActivity : BaseActivity() {
     private lateinit var sfl: SwipeRefreshLayout
 
     private lateinit var seatFragment: SeatFragment
+    private var flag = false
 
     override fun getLayoutId() = R.layout.activity_main
 
@@ -65,11 +66,11 @@ class MainActivity : BaseActivity() {
         fab = findViewById(R.id.fab)
 
         viewModel.user = intent.extras?.get("user") as User
-        tv_title.text = "欢迎！${viewModel.user.name}"
     }
 
     override fun onStart() {
         super.onStart()
+        tv_title.text = "欢迎！${viewModel.user.name}"
         setListener()
         setObserver()
     }
@@ -85,7 +86,6 @@ class MainActivity : BaseActivity() {
                     }
                     RESULT_CHANGEUSERNAME -> {
                         viewModel.user = data?.extras?.get("user") as User
-                        tv_title.text = "欢迎！${viewModel.user.name}"
                     }
                 }
             }
@@ -95,14 +95,17 @@ class MainActivity : BaseActivity() {
     private fun setListener() {
         viewModel.setOnRequest(object : MainVM.OnRequest {
             override fun onFinish() {
-                if (viewModel.getSeatListLD().value?.size != 0) {
-                    runOnUiThread {
-                        initCBFloor()
-                        initCBArea()
-                    }
-                }
-                sfl.isRefreshing = false
                 runOnUiThread {
+                    initCBFloor()
+                    initCBArea()
+                    viewModel.getSeatListLD().value?.let { list ->
+                        if (list.size != 0) {
+                            list.filter { it.floor == viewModel.tempFloor.value && it.area == viewModel.tempArea.value }
+                                .let { adapter.setList(it) }
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                    sfl.isRefreshing = false
                     Toast.makeText(this@MainActivity, "数据刷新成功", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -128,18 +131,18 @@ class MainActivity : BaseActivity() {
                     list: List<String>
                 ) {
                     list[position].let { s ->
-                        setItem(s)
+                        flag = false
                         cb_area.apply {
-                            viewModel.getSeatListLD().value
-                                ?.filter { it.floor.toString() == s }
-                                ?.map { it.area }// 取area值组成新list
-                                ?.toSortedSet()?.toList()// 去重
-                                ?.let { it ->
-                                    setList(it.map { it.toString() })
-                                    viewModel.tempArea.value = it[0].toString()
+                            viewModel.floorList
+                                .filter { it.floor.toString() == s }[0].areaList
+                                .let {
+                                    setList(it)
+                                    setItem(it[0])
+                                    viewModel.tempArea.value = it[0]
                                 }
                         }
-                        viewModel.tempFloor.value = s
+                        flag = true
+                        viewModel.tempFloor.value = s.toInt()
                     }
                 }
             })
@@ -155,7 +158,6 @@ class MainActivity : BaseActivity() {
                     list: List<String>
                 ) {
                     list[position].let { s ->
-                        setItem(s)
                         viewModel.tempArea.value = s
                     }
                 }
@@ -167,60 +169,60 @@ class MainActivity : BaseActivity() {
         }
 
         sfl.setOnRefreshListener {
-            sfl.isRefreshing = true
-            viewModel.loadData()
+            refreshList()
         }
     }
 
-    private fun setObserver() {
-        viewModel.getSeatListLD().observe(this) {
-            adapter.notifyDataSetChanged()
-        }
 
+    private fun setObserver() {
         viewModel.tempFloor.observe(this) {
-            refreshList()
+            if (flag) {
+                refreshList()
+            }
         }
 
         viewModel.tempArea.observe(this) {
-            refreshList()
+            if (flag) {
+                refreshList()
+            }
         }
     }
 
     private fun refreshList() {
+        sfl.isRefreshing = true
         viewModel.loadData()
-        viewModel.getSeatListLD().value
-            ?.filter { it.floor.toString() == viewModel.tempFloor.value && it.area == viewModel.tempArea.value }
-            ?.let {
-                adapter.setList(it as MutableList<SeatBean>)
-            }
-        adapter.notifyDataSetChanged()
     }
 
     private fun initCBFloor() {
+        flag = false
         cb_floor.apply {
-            viewModel.getSeatListLD().value
-                ?.map { it.floor }// 取floor值组成新list
-                ?.toSortedSet()?.toList()// 去重
-                ?.let { it ->
-                    setList(it.map { it.toString() })
-                    viewModel.tempFloor.value = it[0].toString()
+            viewModel.floorList
+                .map { it.floor }
+                .let { list ->
+                    setList(list.map { it.toString() })
+                    viewModel.tempFloor.apply {
+                        value = value ?: list[0]
+                    }
                 }
             setDescription("层")
         }
+        flag = true
     }
 
     private fun initCBArea() {
+        flag = false
         cb_area.apply {
-            viewModel.getSeatListLD().value
-                ?.filter { it.floor.toString() == viewModel.tempFloor.value }
-                ?.map { it.area }// 取area值组成新list
-                ?.toSortedSet()?.toList()// 去重
-                ?.let { it ->
-                    setList(it.map { it.toString() })
-                    viewModel.tempArea.value = it[0].toString()
+            viewModel.floorList
+                .filter { it.floor == viewModel.tempFloor.value }[0].areaList
+                .let { list ->
+                    setList(list)
+                    viewModel.tempArea.apply {
+                        value = value ?: list[0]
+                    }
                 }
             setDescription("区")
         }
+        flag = true
     }
 
     private fun showSeatFragment(seatBean: SeatBean) {
