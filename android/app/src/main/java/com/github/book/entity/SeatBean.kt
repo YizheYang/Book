@@ -1,5 +1,7 @@
 package com.github.book.entity
 
+import com.github.book.Constant.format12date
+import com.github.book.Constant.mergeTime
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,35 +33,26 @@ data class SeatBean(
         return false
     }
 
-    fun getBookedSDate(): String {
+    fun getBookedDateList(): List<Array<Long>> {
         val date = SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()
-        val list = mutableListOf<Long>()
-        for (d in statusList) {
-            if (date in d.sDate..d.dDate) {
-                list.add(d.sDate)
+        val list = mutableListOf<Array<Long>>()
+        for (status in statusList) {
+            if (date < status.dDate) {
+                list.add(arrayOf(status.sDate, status.dDate))
             }
         }
-        val sb = StringBuilder()
-        for (s in list.map { it.toString().substring(8, 10) }) {
-            sb.append(s).append(",")
-        }
-        sb.deleteCharAt(sb.length - 1)
-        return sb.toString()
+        return list.mergeTime()
     }
 
-    fun getBookedDDate(): String {
-        val date = SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()
-        val list = mutableListOf<Long>()
-        for (d in statusList) {
-            if (date in d.sDate..d.dDate) {
-                list.add(d.dDate)
-            }
-        }
+    fun getBookedDate(): String {
         val sb = StringBuilder()
-        for (s in list.map { it.toString().substring(8, 10) }) {
-            sb.append(s).append(",")
+        for (date in getBookedDateList()) {
+            sb.append(date[0].toString().format12date())
+                .append("--")
+                .append(date[1].toString().format12date())
+                .append("\n")
         }
-        sb.deleteCharAt(sb.length - 1)
+        sb.deleteAt(sb.length - 1)
         return sb.toString()
     }
 }

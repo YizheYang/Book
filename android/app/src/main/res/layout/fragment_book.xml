@@ -46,7 +46,7 @@
                 app:layout_constraintVertical_bias="0.2" />
 
             <com.github.book.widget.ComboBox
-                android:id="@+id/cbb_book_choose"
+                android:id="@+id/cbb_book_start"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="48dp"
@@ -54,7 +54,17 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.35000002" />
+
+            <com.github.book.widget.ComboBox
+                android:id="@+id/cbb_book_end"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toEndOf="@+id/cbb_book_start"
+                app:layout_constraintStart_toStartOf="@+id/cbb_book_start"
+                app:layout_constraintTop_toBottomOf="@+id/cbb_book_start" />
 
             <Button
                 android:id="@+id/btn_book_cancel"

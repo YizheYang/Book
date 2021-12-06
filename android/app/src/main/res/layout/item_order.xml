@@ -9,9 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rcv_bottomLeftRadiu="20dp"
@@ -21,12 +22,12 @@
 
         <TextView
             android:id="@+id/tv_item_order_index"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@color/trans_black"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textColor="@color/white"
+            android:textSize="16sp" />
     </com.github.book.widget.RadiusCardView>
 
 
@@ -43,5 +44,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/rcv_item_order"
         app:layout_constraintTop_toTopOf="@id/rcv_item_order" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1sp"
+        android:background="@color/trans_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

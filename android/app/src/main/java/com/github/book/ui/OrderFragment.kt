@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.github.book.Constant
+import com.github.book.Constant.format12date
 import com.github.book.R
 import com.github.book.adapter.OrderAdapter
 import com.github.book.base.BaseFragment
@@ -66,35 +67,46 @@ class OrderFragment : BaseFragment() {
         adapter.setOnChildrenClickListener(object : OrderAdapter.OnChildrenClickListener {
             override fun onItemClick(position: Int) {
                 val seat = orderList[position]
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("退订")
-                    .setMessage("楼层：${seat.floor}\n区域：${seat.area}\n座位号：${seat.no}\n开始时间：${seat.sDate}\n结束时间：${seat.dDate}\n是否退订该座位")
-                    .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
-                    .setPositiveButton("确认") { dialog, which ->
-                        loading()
-                        val json = Gson().toJson(OrderRequest(seat.id, (requireActivity() as SettingActivity).user.id))
-                        RequestByOkhttp().post(
-                            Constant.unsubscribe,
-                            json,
-                            object : RequestByOkhttp.MyCallBack(requireContext()) {
-                                override fun onResponse(call: Call, response: Response) {
-                                    super.onResponse(call, response)
-                                    val myResponse =
-                                        Gson().fromJson(response.body()?.string(), BookResponse::class.java)
-                                    handler.sendEmptyMessage(
-                                        if (myResponse.success) {
-                                            1
-                                        } else {
-                                            2
-                                        }
-                                    )
-                                    refreshOrder()
-                                }
-                            })
-                    }
-                builder.create().show()
+                if (seat.sDate < SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()) {
+                    Toast.makeText(requireContext(), "该预订已过期", Toast.LENGTH_SHORT).show()
+                } else {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("退订")
+                        .setMessage(
+                            "楼层：${seat.floor}\n" +
+                                    "区域：${seat.area}\n" +
+                                    "座位号：${seat.no}\n" +
+                                    "开始时间：${seat.sDate.toString().format12date()}\n" +
+                                    "结束时间：${seat.dDate.toString().format12date()}\n" +
+                                    "是否退订该座位"
+                        )
+                        .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
+                        .setPositiveButton("确认") { dialog, which ->
+                            loading()
+                            val json =
+                                Gson().toJson(OrderRequest(seat.id, (requireActivity() as SettingActivity).user.id))
+                            RequestByOkhttp().post(
+                                Constant.unsubscribe,
+                                json,
+                                object : RequestByOkhttp.MyCallBack(requireContext()) {
+                                    override fun onResponse(call: Call, response: Response) {
+                                        super.onResponse(call, response)
+                                        val myResponse =
+                                            Gson().fromJson(response.body()?.string(), BookResponse::class.java)
+                                        handler.sendEmptyMessage(
+                                            if (myResponse.success) {
+                                                1
+                                            } else {
+                                                2
+                                            }
+                                        )
+                                        refreshOrder()
+                                    }
+                                })
+                        }
+                    builder.create().show()
+                }
             }
-
         })
 
         background.setOnClickListener {
@@ -112,9 +124,7 @@ class OrderFragment : BaseFragment() {
                     val myResponse = Gson().fromJson(response.body()?.string(), OrderResponse::class.java)
                     if (myResponse.success && myResponse.data.isNotEmpty()) {
                         orderList.clear()
-                        orderList.addAll(myResponse.data.filter {
-                            it.sDate > SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).toLong()
-                        }.sortedBy { it.sDate }.toMutableList())
+                        orderList.addAll(myResponse.data.sortedBy { it.sDate }.toMutableList())
                         handler.sendEmptyMessage(0)
                     }
                 }

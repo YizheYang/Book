@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.Constant
+import com.github.book.Constant.format8date
 import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.base.BaseFragment
@@ -35,19 +36,23 @@ import java.util.*
 class BookFragment(private val seat: SeatBean) : BaseFragment() {
     private lateinit var background: View
     private lateinit var title: TextView
-    private lateinit var comboBox: ComboBox
+    private lateinit var cbb_start: ComboBox
+    private lateinit var cbb_end: ComboBox
     private lateinit var btn_cancel: Button
     private lateinit var btn_confirm: Button
 
     private lateinit var viewModel: MainVM
     private var date = 0L
-    private var time = 0
+    private var time_start = 0
+    private var time_end = 0
 
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
             when (msg.what) {
-                1 -> Toast.makeText(requireContext(), "预订成功", Toast.LENGTH_SHORT).show()
+                1 -> {
+                    Toast.makeText(requireContext(), "预订成功", Toast.LENGTH_SHORT).show()
+                    remove()
+                }
                 2 -> Toast.makeText(requireContext(), "请求失败，可能是没位置了", Toast.LENGTH_SHORT).show()
             }
         }
@@ -58,7 +63,8 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
     override fun initView(view: View, savedInstanceState: Bundle?) {
         background = view.findViewById(R.id.view_book_background)
         title = view.findViewById(R.id.tv_book_range)
-        comboBox = view.findViewById(R.id.cbb_book_choose)
+        cbb_start = view.findViewById(R.id.cbb_book_start)
+        cbb_end = view.findViewById(R.id.cbb_book_end)
         btn_cancel = view.findViewById(R.id.btn_book_cancel)
         btn_confirm = view.findViewById(R.id.btn_book_confirm)
     }
@@ -66,34 +72,38 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
         date = SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).toLong()
-        title.text = "预订的范围是${
-            (date + 1L).toString().let {
-                it.substring(0, 4) + "." + it.substring(4, 6) + "." + it.substring(6, 8)
-            }
-        }"
-        comboBox.setList(getFreeTime().map { it.toString() })
-        comboBox.setItem("")
-        comboBox.setDescription("时")
+        title.text = "预订的范围是${(date + 1L).toString().format8date()}"
+        cbb_start.setList(getFreeTime().map { it.toString() })
+        cbb_start.setItem("")
+        cbb_start.setDescription("起")
+        cbb_end.setList(getFreeTime().map { it.toString() })
+        cbb_end.setItem("")
+        cbb_end.setDescription("止")
         setListener()
     }
 
     private fun setListener() {
-        comboBox.setMyClick(object : ComboBox.OnMyClick {
+        cbb_start.setMyClick(object : ComboBox.OnMyClick {
             override fun onClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long, list: List<String>) {
-                time = list[position].toInt()
+                time_start = list[position].toInt()
             }
+        })
 
+        cbb_end.setMyClick(object : ComboBox.OnMyClick {
+            override fun onClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long, list: List<String>) {
+                time_end = list[position].toInt()
+            }
         })
 
         btn_confirm.setOnClickListener {
-            if (time in 8..22) {
+            if (time_start in 8..22 && time_end in 8..22 && time_start < time_end) {
                 loading()
                 val json = Gson().toJson(
                     BookRequest(
                         seat.id,
                         viewModel.user.id,
-                        ((date + 1).toString() + formatTime(time) + "00").toLong(),
-                        ((date + 1).toString() + formatTime(time + 1) + "00").toLong()
+                        ((date + 1).toString() + formatTime(time_start) + "00").toLong(),
+                        ((date + 1).toString() + formatTime(time_end) + "00").toLong()
                     )
                 )
                 RequestByOkhttp().post(Constant.reserve, json, object : RequestByOkhttp.MyCallBack(requireContext()) {
@@ -102,7 +112,6 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
                         val myResponse = Gson().fromJson(response.body()?.string(), BookResponse::class.java)
                         if (myResponse.success) {
                             handler.sendEmptyMessage(1)
-                            remove()
                         } else {
                             handler.sendEmptyMessage(2)
                         }

@@ -1,6 +1,7 @@
 package com.github.book.ui
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -43,16 +44,14 @@ class SeatFragment(private val seat: SeatBean) : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(requireActivity())[MainVM::class.java]
         id.text = "座位编号：${seat.no}"
+        dDate.movementMethod = ScrollingMovementMethod.getInstance()
         if (seat.isBook()) {
             status.text = "状态：无空位"
-            sDate.text = "开始时间：${
-                seat.getBookedSDate()//.let { it.substring(0, 4) + "." + it.substring(4, 6) + "." + it.substring(6, 8) }
-            }"
-            dDate.text = "结束时间：${
-                seat.getBookedDDate()//.let { it.substring(0, 4) + "." + it.substring(4, 6) + "." + it.substring(6, 8) }
-            }"
+            dDate.text = seat.getBookedDate()
         } else {
             status.text = "状态：有空位"
+            sDate.visibility = View.GONE
+            dDate.visibility = View.GONE
         }
         setListener()
     }
