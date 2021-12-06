@@ -45,7 +45,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     val RESULT_LOGOUT = 1
     val RESULT_CHANGEUSERNAME = 2
-    val RESULT_OPENCRASHDIR = 3
+    val RESULT_UNSUBSCRIBE = 3
+    val RESULT_OPENCRASHDIR = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

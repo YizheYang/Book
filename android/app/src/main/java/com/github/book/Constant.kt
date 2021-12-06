@@ -47,6 +47,9 @@ object Constant {
     }
 
     fun List<Array<Long>>.mergeTime(): List<Array<Long>> {
+        if (size == 1) {
+            return this
+        }
         var i = 1
         val tempList = mutableListOf<Array<Long>>()
         while (i < size) {

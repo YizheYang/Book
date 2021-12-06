@@ -41,7 +41,7 @@ data class SeatBean(
                 list.add(arrayOf(status.sDate, status.dDate))
             }
         }
-        return list.mergeTime()
+        return list.mergeTime().sortedBy { it[0] }
     }
 
     fun getBookedDate(): String {
@@ -52,7 +52,6 @@ data class SeatBean(
                 .append(date[1].toString().format12date())
                 .append("\n")
         }
-        sb.deleteAt(sb.length - 1)
         return sb.toString()
     }
 }

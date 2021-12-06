@@ -43,7 +43,10 @@ class OrderFragment : BaseFragment() {
             super.handleMessage(msg)
             when (msg.what) {
                 0 -> adapter.notifyDataSetChanged()
-                1 -> Toast.makeText(requireContext(), "退订成功", Toast.LENGTH_SHORT).show()
+                1 -> {
+                    Toast.makeText(requireContext(), "退订成功", Toast.LENGTH_SHORT).show()
+                    (requireActivity() as SettingActivity).unSubscribe = true
+                }
                 2 -> Toast.makeText(requireContext(), "找不到该订单", Toast.LENGTH_SHORT).show()
             }
         }
@@ -61,6 +64,7 @@ class OrderFragment : BaseFragment() {
         recyclerView.adapter = adapter
         refreshOrder()
         setListener()
+        Toast.makeText(requireContext(), "单击订单即可唤起操作页", Toast.LENGTH_SHORT).show()
     }
 
     private fun setListener() {

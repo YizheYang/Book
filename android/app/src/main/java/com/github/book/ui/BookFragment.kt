@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.Constant
 import com.github.book.Constant.format8date
+import com.github.book.Constant.mergeTime
 import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.base.BaseFragment
@@ -76,7 +77,7 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
         cbb_start.setList(getFreeTime().map { it.toString() })
         cbb_start.setItem("")
         cbb_start.setDescription("起")
-        cbb_end.setList(getFreeTime().map { it.toString() })
+        cbb_end.setList(getFreeTime().map { (it + 1).toString() })
         cbb_end.setItem("")
         cbb_end.setDescription("止")
         setListener()
@@ -96,7 +97,8 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
         })
 
         btn_confirm.setOnClickListener {
-            if (time_start in 8..22 && time_end in 8..22 && time_start < time_end) {
+            if (time_start in 8..22 && time_end in 9..23 && isTimeLegal(time_start, time_end)
+            ) {
                 loading()
                 val json = Gson().toJson(
                     BookRequest(
@@ -148,11 +150,34 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
             all.add(i)
         }
         val booked = mutableListOf<Int>()
+        val temp = mutableListOf<Array<Long>>()
         for (s in seat.statusList) {
-            if (s.sDate.toString().substring(0, 8) == (date + 1L).toString())
-                booked.add(s.sDate.toString().substring(8, 10).toInt())
+            if (s.sDate.toString().substring(0, 8) == (date + 1L).toString()) {
+                temp.add(arrayOf(s.sDate, s.dDate))
+            }
+        }
+        for (date in temp.mergeTime()) {
+            for (time in date[0] until date[1]) {
+                booked.add(time.toString().substring(8, 10).toInt())
+            }
         }
         return all - booked
+    }
+
+    private fun isTimeLegal(start: Int, end: Int): Boolean {
+        if (start >= end) {
+            return false
+        }
+        val list = getFreeTime()
+        if (start !in list || end - 1 !in list) {
+            return false
+        }
+        for (time in start until end) {
+            if (time !in list) {
+                return false
+            }
+        }
+        return true
     }
 
     private fun remove() {

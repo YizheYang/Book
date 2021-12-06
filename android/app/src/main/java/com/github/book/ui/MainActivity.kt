@@ -87,6 +87,9 @@ class MainActivity : BaseActivity() {
                     RESULT_CHANGEUSERNAME -> {
                         viewModel.user = data?.extras?.get("user") as User
                     }
+                    RESULT_UNSUBSCRIBE -> {
+                        refreshList()
+                    }
                 }
             }
         }
