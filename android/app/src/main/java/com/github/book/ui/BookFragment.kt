@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.github.book.Constant
+import com.github.book.Constant.format12date
 import com.github.book.Constant.format8date
 import com.github.book.Constant.mergeTime
 import com.github.book.MainVM
@@ -51,10 +52,16 @@ class BookFragment(private val seat: SeatBean) : BaseFragment() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 1 -> {
-                    Toast.makeText(requireContext(), "预订成功", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "预订成功，时间为${((date + 1).toString() + formatTime(time_start) + "00").format12date()}--${
+                            ((date + 1).toString() + formatTime(time_end) + "00").format12date()
+                        }",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     remove()
                 }
-                2 -> Toast.makeText(requireContext(), "请求失败，可能是没位置了", Toast.LENGTH_SHORT).show()
+                2 -> Toast.makeText(requireContext(), "预订失败，当前时间段已有预订座位", Toast.LENGTH_SHORT).show()
             }
         }
     }

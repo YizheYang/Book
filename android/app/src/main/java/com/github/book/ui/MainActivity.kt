@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.github.book.Constant.format8date
 import com.github.book.MainVM
 import com.github.book.R
 import com.github.book.adapter.SeatAdapter
@@ -19,6 +20,8 @@ import com.github.book.entity.SeatBean
 import com.github.book.entity.User
 import com.github.book.widget.ComboBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : BaseActivity() {
 
@@ -72,7 +75,9 @@ class MainActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        tv_title.text = "欢迎！${viewModel.user.name}"
+        tv_title.text = "欢迎，${viewModel.user.name}！今天是${
+            SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).format8date()
+        }\n" + "当前显示今天的座位情况，可预订明天的座位"
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -109,7 +114,7 @@ class MainActivity : BaseActivity() {
                         }
                     }
                     sfl.isRefreshing = false
-                    Toast.makeText(this@MainActivity, "数据刷新成功", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@MainActivity, "数据刷新成功", Toast.LENGTH_SHORT).show()
                 }
             }
         })

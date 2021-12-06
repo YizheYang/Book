@@ -42,7 +42,13 @@ class ComboBox(context: Context, attrs: AttributeSet? = null, def: Int = 0) : Co
         list?.let {
             this.list = it
             if (tv_item.text == null || tv_item.text == "") {
-                setItem(it[0])
+                setItem(
+                    if (it.isNotEmpty()) {
+                        it[0]
+                    } else {
+                        null
+                    }
+                )
             }
         }
     }

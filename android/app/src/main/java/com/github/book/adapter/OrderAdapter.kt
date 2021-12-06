@@ -51,7 +51,7 @@ class OrderAdapter(private val context: Context, private var list: MutableList<O
         )
         holder.time.text =
             "${list[position].sDate.toString().format12date()}—${list[position].dDate.toString().format12date()}"
-        if (list[position].sDate < SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()) {
+        if (list[position].dDate < SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.trans_black))
         }
     }

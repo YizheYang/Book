@@ -37,6 +37,8 @@
                 android:id="@+id/tv_seat_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
                 android:text="座位编号："
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -61,7 +63,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_seat_id" />
 
             <TextView
-                android:id="@+id/tv_seat_sDate"
+                android:id="@+id/tv_seat_bookedTimeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -74,10 +76,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_seat_status" />
 
             <TextView
-                android:id="@+id/tv_seat_ddate"
+                android:id="@+id/tv_seat_bookedTime"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
                 android:scrollbars="vertical"
                 android:textColor="@color/black"
@@ -85,8 +88,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/btn_seat_cancel"
                 app:layout_constraintEnd_toEndOf="@+id/btn_seat_book"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/tv_seat_sDate"
-                app:layout_constraintTop_toBottomOf="@+id/tv_seat_sDate"
+                app:layout_constraintStart_toStartOf="@+id/tv_seat_bookedTimeTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_seat_bookedTimeTitle"
                 app:layout_constraintVertical_bias="0.0" />
 
             <Button
@@ -95,20 +98,31 @@
                 android:layout_height="wrap_content"
                 android:text="取消"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_seat_book"
+                app:layout_constraintEnd_toStartOf="@+id/btn_seat_bookNow"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.8" />
 
             <Button
+                android:id="@+id/btn_seat_bookNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="预订现在"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_seat_cancel"
+                app:layout_constraintEnd_toStartOf="@+id/btn_seat_book"
+                app:layout_constraintStart_toEndOf="@+id/btn_seat_cancel"
+                app:layout_constraintTop_toTopOf="@+id/btn_seat_cancel" />
+
+            <Button
                 android:id="@+id/btn_seat_book"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="预订"
+                android:text="预订明天"
                 app:layout_constraintBottom_toBottomOf="@id/btn_seat_cancel"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btn_seat_cancel"
-                app:layout_constraintTop_toTopOf="@+id/btn_seat_cancel" />
+                app:layout_constraintStart_toEndOf="@+id/btn_seat_bookNow"
+                app:layout_constraintTop_toTopOf="@+id/btn_seat_cancel"
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.github.book.widget.RadiusCardView>

@@ -71,7 +71,7 @@ class OrderFragment : BaseFragment() {
         adapter.setOnChildrenClickListener(object : OrderAdapter.OnChildrenClickListener {
             override fun onItemClick(position: Int) {
                 val seat = orderList[position]
-                if (seat.sDate < SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()) {
+                if (seat.dDate < SimpleDateFormat("yyyyMMddHHmm").format(Date(System.currentTimeMillis())).toLong()) {
                     Toast.makeText(requireContext(), "该预订已过期", Toast.LENGTH_SHORT).show()
                 } else {
                     val builder = AlertDialog.Builder(requireContext())
@@ -126,9 +126,11 @@ class OrderFragment : BaseFragment() {
                 override fun onResponse(call: Call, response: Response) {
                     super.onResponse(call, response)
                     val myResponse = Gson().fromJson(response.body()?.string(), OrderResponse::class.java)
-                    if (myResponse.success && myResponse.data.isNotEmpty()) {
+                    if (myResponse.success) {
                         orderList.clear()
-                        orderList.addAll(myResponse.data.sortedBy { it.sDate }.toMutableList())
+                        if (myResponse.data.isNotEmpty()) {
+                            orderList.addAll(myResponse.data.sortedBy { it.sDate }.toMutableList())
+                        }
                         handler.sendEmptyMessage(0)
                     }
                 }

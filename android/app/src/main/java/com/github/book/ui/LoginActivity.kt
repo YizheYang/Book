@@ -195,7 +195,7 @@ class LoginActivity : BaseActivity() {
                             }
                         }
                         MainActivity.startActivity(this@LoginActivity, myResponse.data)
-                        Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
                         Toast.makeText(this@LoginActivity, "账号或密码错误", Toast.LENGTH_SHORT).show()

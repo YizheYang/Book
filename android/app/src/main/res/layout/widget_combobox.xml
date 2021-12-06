@@ -23,6 +23,7 @@
         android:id="@+id/ib_comboBox"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/colorBgBlue"
         android:src="@drawable/ic_baseline_expand_more_24"
         app:layout_constraintBottom_toBottomOf="@+id/tv_comboBox_item"
